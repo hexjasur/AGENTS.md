@@ -1,9 +1,21 @@
 {
   "name": "@hexjasur/agents-md",
   "version": "1.0.1",
-  "description": "Install and update the AGENTS.md rules in a project",
+  "description": "Install and update AGENTS.md instructions for AI coding agents",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "agents.md",
+    "ai agents",
+    "coding agents",
+    "agent instructions",
+    "developer tools",
+    "project setup",
+    "github copilot",
+    "claude code",
+    "cursor",
+    "cli"
+  ],
   "bin": {
     "agents-md": "bin/cli.js"
   },
