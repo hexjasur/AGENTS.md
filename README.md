@@ -1,32 +1,75 @@
 # @hexjasur/agents-md
 
-`AGENTS.md` qoidalarini loyiha ichiga o‘rnatadi va o‘rnatilgan versiyani `.agents-md/installation.json` faylida qayd etadi. Node.js 18 yoki yangiroq versiya kerak.
+CLI to install the repository's `AGENTS.md` rules in another project. It supports both npm/npx and a shell entry point. Requires Node.js 18 or newer.
 
-## Foydalanish
+> The package source is in GitHub. Until it is published to npm, the `npx @hexjasur/agents-md` command is not available from the public npm registry. Use the local shell/Node commands below to test it.
 
-```sh
-npx @hexjasur/agents-md
-npx @hexjasur/agents-md update
-```
+## Quick start
 
-Shell skripti ham Node.js CLI’dan foydalanadi:
+From this repository:
 
 ```sh
-./install-agents.sh [init] [loyiha-papkasi]
-./install-agents.sh update [loyiha-papkasi] [--force]
+# Install into the current project directory
+./install-agents.sh
+
+# Or select a directory
+./install-agents.sh init ../my-project
+
+# Update a previously installed copy
+./install-agents.sh update ../my-project
 ```
 
-Loyihada `AGENTS.md` mavjud bo‘lsa, `init` uni o‘chirish, yangisiga almashtirish yoki bekor qilishni so‘raydi. Bo‘sh yoki tushunarsiz javob bekor qiladi. Interaktiv terminal bo‘lmasa, mavjud faylga tegilmaydi.
+The npm command after publication will be:
 
-## Xavfsizlik
+```sh
+npx @hexjasur/agents-md                 # initialize current directory
+npx @hexjasur/agents-md init ./my-app   # initialize selected directory
+npx @hexjasur/agents-md update ./my-app # update managed copy
+```
 
-Manifest sxemasi, schema versiyasi, SemVer ko‘rinishidagi versiya, ISO sana va SHA-256 xeshi tekshiriladi. Versiya qiymati fayl yo‘li yoki tarmoq manzili sifatida ishlatilmaydi. Yaroqsiz manifest update’ni to‘xtatadi. O‘rnatilgandan so‘ng `AGENTS.md` o‘zgartirilgan bo‘lsa, update odatiy holatda rad etiladi; faqat `--force` bilan davom ettirish mumkin. Maqsad fayl va manifest symlink bo‘lsa, skript ishni rad etadi. Manifest yashirin `.agents-md` papkasida saqlanadi.
+Both entry points call the same Node.js implementation. The `.sh` entry point requires Node.js and a POSIX-compatible shell (for example, Linux, macOS, WSL, or Git Bash).
 
-Bu SHA-256 xesh orqali o‘zgarishni aniqlaydi, lekin raqamli imzo emas: loyiha egasi manifest va faylni ikkalasini ham o‘zgartira oladi. CLI’ni faqat ishonchli manbadan ishga tushiring.
+## Existing AGENTS.md behavior
 
-## Tekshiruv
+If the destination already contains `AGENTS.md`, init asks what to do:
+
+- `d` — delete the existing file and its installer manifest.
+- `r` — replace it with the repository's current file and record a new manifest.
+- Enter, an empty response, or an unknown response — cancel without changing the existing file.
+
+In a non-interactive run the existing file is left untouched. Update does not ask before replacing a managed file: it verifies that the current file still matches its recorded SHA-256 hash. If the file was edited, update stops unless `--force` is explicitly given:
+
+```sh
+./install-agents.sh update ./my-app --force
+```
+
+`--force` is intentionally not an init option; init uses an interactive choice so replacement is deliberate.
+
+## Installation record and validation
+
+The installer stores metadata at `.agents-md/installation.json`, including the manifest schema version, installed package version, timestamp, and SHA-256 of the installed file. The manifest has a strict set of fields. Versions are bounded and validated before use, and are never treated as paths or URLs. Invalid JSON, schema, version, timestamp, or hash causes update to stop. Symlinked target files and metadata paths are rejected.
+
+The hash detects local edits; it is not a digital signature. A user able to edit both the file and manifest can change both. Only run the CLI from a trusted source.
+
+## Test locally
 
 ```sh
 npm test
 npm pack --dry-run
 ```
+
+To try the packed npm CLI without publishing, create a tarball with `npm pack`, install that tarball into a temporary folder, then run its `agents-md` executable there.
+
+## Publish checklist
+
+1. Confirm the npm package name and npm account/scope are available and authorized.
+2. Run `npm test` and inspect `npm pack --dry-run`.
+3. Bump `version` in `package.json` for each release.
+4. Publish with the intended public access, for example `npm publish --access public` for a public scoped package.
+
+Publishing is separate from pushing this Git repository.
+
+## Repository
+
+- Source and issue tracker: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
+- License: declared as MIT in package metadata.
