@@ -1,0 +1,23 @@
+{
+  "name": "@hexjasur/agents-md",
+  "version": "1.0.0",
+  "description": "Install and update the AGENTS.md rules in a project",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "agents-md": "./bin/cli.js"
+  },
+  "files": [
+    "AGENTS.md",
+    "bin/",
+    "lib/",
+    "install-agents.sh",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
