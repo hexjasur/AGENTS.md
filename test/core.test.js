@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, writeFile, mkdir, rename, rmdir } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { installProject, updateProject, isValidVersion, getCurrentVersion } from '../lib/core.js';
@@ -19,27 +19,43 @@ test('version validator only accepts bounded semver-like versions', () => {
 test('install writes content and validated version/hash manifest', async () => withTempDir(async (dir) => {
   const result = await installProject(dir);
   assert.equal(result.status, 'installed');
-  const manifest = JSON.parse(await readFile(path.join(dir, '.agents-md', 'installation.json'), 'utf8'));
+  const manifest = JSON.parse(await readFile(path.join(dir, '.agent', 'hexjasurs.agent.scheme.json'), 'utf8'));
   assert.equal(manifest.version, getCurrentVersion());
   assert.match(manifest.contentHash, /^[a-f0-9]{64}$/);
+  await assert.rejects(readFile(path.join(dir, '.agents-md', 'installation.json')), { code: 'ENOENT' });
 }));
 
 test('existing file is not overwritten implicitly and tampering blocks update', async () => withTempDir(async (dir) => {
   await writeFile(path.join(dir, 'AGENTS.md'), 'user-owned');
   assert.equal((await installProject(dir)).status, 'exists');
-  await assert.rejects(updateProject(dir), /manifesti topilmadi/);
+  await assert.rejects(updateProject(dir), /Installation manifest not found/);
 }));
 
 test('tampered installed content cannot be updated without force', async () => withTempDir(async (dir) => {
   await installProject(dir);
   await writeFile(path.join(dir, 'AGENTS.md'), 'edited by user');
-  await assert.rejects(updateProject(dir), /o‘zgartirilgan/);
+  await assert.rejects(updateProject(dir), /was modified/);
   assert.equal((await updateProject(dir, { force: true })).status, 'replaced');
+}));
+
+test('update migrates the legacy manifest into the agent scheme location', async () => withTempDir(async (dir) => {
+  await installProject(dir);
+  const currentManifest = path.join(dir, '.agent', 'hexjasurs.agent.scheme.json');
+  const legacyDirectory = path.join(dir, '.agents-md');
+  await mkdir(legacyDirectory);
+  await rename(currentManifest, path.join(legacyDirectory, 'installation.json'));
+  await rmdir(path.join(dir, '.agent'));
+
+  assert.equal((await updateProject(dir)).status, 'replaced');
+  const migratedManifest = JSON.parse(await readFile(currentManifest, 'utf8'));
+  assert.equal(migratedManifest.version, getCurrentVersion());
+  await assert.rejects(readFile(path.join(legacyDirectory, 'installation.json')), { code: 'ENOENT' });
+  assert.equal((await readdir(dir)).includes('.agents-md'), false);
 }));
 
 test('malformed manifest schema/version is rejected, never trusted', async () => withTempDir(async (dir) => {
   await mkdir(path.join(dir, '.agents-md'));
   await writeFile(path.join(dir, 'AGENTS.md'), 'user-owned');
   await writeFile(path.join(dir, '.agents-md', 'installation.json'), JSON.stringify({ schemaVersion: 1, version: '../nope', installedAt: new Date().toISOString(), contentHash: '0'.repeat(64) }));
-  await assert.rejects(updateProject(dir), /sxemasi yoki versiyasi noto‘g‘ri/);
+  await assert.rejects(updateProject(dir), /schema or version is invalid/);
 }));

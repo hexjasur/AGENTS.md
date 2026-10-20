@@ -5,17 +5,27 @@ import { installProject, removeInstalledFile, updateProject, getCurrentVersion }
 
 const HELP = `agents-md v${getCurrentVersion()}
 
-Foydalanish:
-  npx @hexjasur/agents-md [init] [papka]
-  npx @hexjasur/agents-md update [papka] [--force]
-  npx @hexjasur/agents-md --version
+USAGE:
+  npx -y @hexjasur/agents-md [init] [directory]
+  npx -y @hexjasur/agents-md update [directory] [--force]
+  npx -y @hexjasur/agents-md --version
 
-Mavjud AGENTS.md bo‘lsa, standart javob bekor qilishdir. --force faqat update uchun.`;
+COMMANDS:
+  init      Install AGENTS.md in the current or specified directory (default).
+  update    Update a previously installed AGENTS.md.
+
+OPTIONS:
+  --force   Replace a modified AGENTS.md during update.
+  --version Show the installed package version.
+  --help    Show this help message.
+
+If AGENTS.md already exists, init asks whether to delete, replace, or keep it.
+The default action is to keep the existing file. --force is only available for update.`;
 
 async function askAction() {
   const readline = createInterface({ input: stdin, output: stdout });
   try {
-    const answer = (await readline.question('AGENTS.md allaqachon mavjud. [d] Faylni o‘chirish, [r] Yangisiga almashtirish, [c] Bekor qilish (default): ')).trim().toLowerCase();
+    const answer = (await readline.question('AGENTS.md already exists. [d] Delete, [r] Replace, [c] Cancel (default): ')).trim().toLowerCase();
     if (answer === 'd' || answer === 'delete') return 'delete';
     if (answer === 'r' || answer === 'replace') return 'replace';
     return 'cancel';
@@ -32,7 +42,7 @@ async function main() {
   const positional = args.filter((arg) => arg !== '--force');
   const command = positional[0] === 'update' ? 'update' : 'init';
   const projectDir = positional[0] === 'update' || positional[0] === 'init' ? positional[1] ?? '.' : positional[0] ?? '.';
-  if (positional.length > (positional[0] === 'update' || positional[0] === 'init' ? 2 : 1)) throw new Error('Ortiqcha argumentlar bor. --help ni ko‘ring.');
+  if (positional.length > (positional[0] === 'update' || positional[0] === 'init' ? 2 : 1)) throw new Error('Too many arguments. Run with --help for usage.');
   let result;
   if (command === 'update') {
     result = await updateProject(projectDir, { force });
@@ -40,7 +50,7 @@ async function main() {
     result = await installProject(projectDir);
     if (result.status === 'exists') {
       const action = await askAction();
-      if (action === 'cancel') { console.log('Bekor qilindi; mavjud fayl o‘zgartirilmadi.'); return; }
+      if (action === 'cancel') { console.log('Cancelled; the existing file was not changed.'); return; }
       if (action === 'delete') result = await removeInstalledFile(projectDir, { force: true });
       if (action === 'replace') result = await installProject(projectDir, { replaceExisting: true, force: true });
     }
@@ -49,7 +59,7 @@ async function main() {
 }
 
 main().catch((error) => {
-  const message = error instanceof Error ? error.message : 'Noma’lum xatolik';
-  console.error(`Xatolik: ${message}`);
+  const message = error instanceof Error ? error.message : 'Unknown error';
+  console.error(`Error: ${message}`);
   process.exitCode = 1;
 });

@@ -21,9 +21,18 @@ test('CLI initializes in a selected directory and default prompt cancels', async
   const original = await readFile(path.join(dir, 'AGENTS.md'), 'utf8');
   const second = spawnSync(process.execPath, [cli, 'init', dir], { input: '\n', encoding: 'utf8' });
   assert.equal(second.status, 0, second.stderr);
-  assert.match(second.stdout, /Bekor qilindi/);
+  assert.match(second.stdout, /Cancelled/);
   assert.equal(await readFile(path.join(dir, 'AGENTS.md'), 'utf8'), original);
 }));
+
+test('CLI help describes commands and options in English', () => {
+  const result = spawnSync(process.execPath, [cli, '--help'], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /USAGE:/);
+  assert.match(result.stdout, /COMMANDS:/);
+  assert.match(result.stdout, /OPTIONS:/);
+  assert.match(result.stdout, /The default action is to keep the existing file/);
+});
 
 test('CLI explicitly replacing an existing file records a fresh manifest', async () => withTempDir(async (dir) => {
   await writeFile(path.join(dir, 'AGENTS.md'), 'custom rules');
@@ -33,13 +42,13 @@ test('CLI explicitly replacing an existing file records a fresh manifest', async
   assert.match(await readFile(path.join(dir, 'AGENTS.md'), 'utf8'), /^# AGENTS\.md/m);
 }));
 
-test('install refuses metadata directory symlinks', async () => withTempDir(async (dir) => {
+test('install refuses scheme directory symlinks', async () => withTempDir(async (dir) => {
   const outside = await mkdtemp(path.join(os.tmpdir(), 'agents-md-outside-'));
   try {
-    await symlink(outside, path.join(dir, '.agents-md'));
+    await symlink(outside, path.join(dir, '.agent'));
     const result = spawnSync(process.execPath, [cli, 'init', dir], { encoding: 'utf8' });
     assert.notEqual(result.status, 0);
-    assert.match(result.stderr, /manifest papkasi/);
+    assert.match(result.stderr, /manifest path must be a regular directory/);
     assert.deepEqual(await (await import('node:fs/promises')).readdir(outside), []);
   } finally { await rm(outside, { recursive: true, force: true }); }
 }));

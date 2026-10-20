@@ -1,75 +1,85 @@
 # @hexjasur/agents-md
 
-CLI to install the repository's `AGENTS.md` rules in another project. It supports both npm/npx and a shell entry point. Requires Node.js 18 or newer.
+Install and update the [`AGENTS.md`](./AGENTS.md) instructions in any project with a small cross-platform CLI. Use it through npm/npx or the included shell script.
 
-> The package source is in GitHub. Until it is published to npm, the `npx @hexjasur/agents-md` command is not available from the public npm registry. Use the local shell/Node commands below to test it.
+**Requirements:** Node.js 18 or later.
 
-## Quick start
+## Quick start with npx
 
-From this repository:
+Install the instructions in the current directory:
 
 ```sh
-# Install into the current project directory
+npx -y @hexjasur/agents-md
+```
+
+Choose a target directory or update a previous installation:
+
+```sh
+npx -y @hexjasur/agents-md init ./my-app
+npx -y @hexjasur/agents-md update ./my-app
+```
+
+## Run from a source checkout
+
+From the repository root, use the shell entry point:
+
+```sh
 ./install-agents.sh
-
-# Or select a directory
 ./install-agents.sh init ../my-project
-
-# Update a previously installed copy
 ./install-agents.sh update ../my-project
 ```
 
-The npm command after publication will be:
+Both entry points call the same Node.js implementation. The shell entry point requires a POSIX-compatible shell, such as Linux, macOS, WSL, or Git Bash.
 
-```sh
-npx @hexjasur/agents-md                 # initialize current directory
-npx @hexjasur/agents-md init ./my-app   # initialize selected directory
-npx @hexjasur/agents-md update ./my-app # update managed copy
+## CLI reference
+
+```text
+npx -y @hexjasur/agents-md [init] [directory]
+npx -y @hexjasur/agents-md update [directory] [--force]
+npx -y @hexjasur/agents-md --help
 ```
 
-Both entry points call the same Node.js implementation. The `.sh` entry point requires Node.js and a POSIX-compatible shell (for example, Linux, macOS, WSL, or Git Bash).
+The directory defaults to the current working directory. `init` is the default command.
 
-## Existing AGENTS.md behavior
+## Existing-file safety
 
-If the destination already contains `AGENTS.md`, init asks what to do:
+If the destination already contains `AGENTS.md`, the interactive `init` command asks whether to delete, replace, or cancel. Cancel is the default, so pressing Enter leaves the existing file unchanged. Non-interactive runs also preserve the existing file.
 
-- `d` — delete the existing file and its installer manifest.
-- `r` — replace it with the repository's current file and record a new manifest.
-- Enter, an empty response, or an unknown response — cancel without changing the existing file.
-
-In a non-interactive run the existing file is left untouched. Update does not ask before replacing a managed file: it verifies that the current file still matches its recorded SHA-256 hash. If the file was edited, update stops unless `--force` is explicitly given:
+Before updating or removing a managed file, the CLI compares its SHA-256 hash with the installation record. If the file was edited, the operation stops unless `--force` is explicitly supplied to `update`:
 
 ```sh
-./install-agents.sh update ./my-app --force
+npx -y @hexjasur/agents-md update ./my-app --force
 ```
 
-`--force` is intentionally not an init option; init uses an interactive choice so replacement is deliberate.
+`--force` is only supported by `update`. During `init`, replacing an existing file requires an explicit interactive choice.
 
-## Installation record and validation
+## Installation record
 
-The installer stores metadata at `.agents-md/installation.json`, including the manifest schema version, installed package version, timestamp, and SHA-256 of the installed file. The manifest has a strict set of fields. Versions are bounded and validated before use, and are never treated as paths or URLs. Invalid JSON, schema, version, timestamp, or hash causes update to stop. Symlinked target files and metadata paths are rejected.
+The CLI keeps its installation record at `.agent/hexjasurs.agent.scheme.json`. It contains the manifest schema version, installed package version, timestamp, and SHA-256 hash of the installed `AGENTS.md`.
 
-The hash detects local edits; it is not a digital signature. A user able to edit both the file and manifest can change both. Only run the CLI from a trusted source.
+The record is validated before use. Invalid JSON, schema, version, timestamp, or hash causes the operation to stop. Symlinked target files and metadata paths are rejected. When updating an installation created by version 1.0.0, the CLI migrates the record from `.agents-md/installation.json` and removes the old directory if it is empty.
 
-## Test locally
+The hash detects accidental or local edits; it is not a digital signature. Anyone able to edit both the file and its record can change both. Only run the CLI from a trusted source.
+
+## Development and release checks
 
 ```sh
 npm test
 npm pack --dry-run
 ```
 
-To try the packed npm CLI without publishing, create a tarball with `npm pack`, install that tarball into a temporary folder, then run its `agents-md` executable there.
+To test the package contents locally, create a tarball with `npm pack`, install it into a temporary project, and run the generated `agents-md` executable.
 
-## Publish checklist
+Before publishing a release:
 
-1. Confirm the npm package name and npm account/scope are available and authorized.
-2. Run `npm test` and inspect `npm pack --dry-run`.
-3. Bump `version` in `package.json` for each release.
-4. Publish with the intended public access, for example `npm publish --access public` for a public scoped package.
+1. Confirm that the npm account has publish access to the package scope.
+2. Run the tests and review `npm pack --dry-run`.
+3. Set a new version in `package.json`.
+4. Publish a public scoped package with `npm publish --access public`.
 
-Publishing is separate from pushing this Git repository.
+Publishing to npm does not push changes to the Git repository.
 
-## Repository
+## Project links
 
-- Source and issue tracker: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
-- License: declared as MIT in package metadata.
+- Repository and issue tracker: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
+- License: MIT
