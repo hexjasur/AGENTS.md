@@ -61,7 +61,7 @@ Every version release also publishes ready-to-download archives on [GitHub Relea
 - `SHA256SUMS.txt` — checksums for verifying the downloads.
 
 ```sh
-VERSION=1.1.0
+VERSION=1.2.0
 curl -L -o agents-md-bundle.zip \
   "https://github.com/hexjasur/AGENTS.md/releases/download/v${VERSION}/agents-md-bundle-v${VERSION}.zip"
 unzip agents-md-bundle.zip
@@ -132,7 +132,7 @@ skills/
 └── skill-authoring/
 ```
 
-At version `1.1.0`, the CLI safely manages `AGENTS.md`; compatible clients can discover the bundled skills from the package. Per-project `skills install`, `skills update`, and per-skill manifests are planned for the next CLI phase.
+At version `1.2.0`, the CLI safely manages `AGENTS.md`; compatible clients can discover the bundled skills from the package. Per-project `skills install`, `skills update`, and per-skill manifests are planned for the next CLI phase.
 
 The release archives are the convenient path for users who do not want to run `npx`: download the bundle, extract it, and copy the required `AGENTS.md` or `skills/` directory into the target project.
 
