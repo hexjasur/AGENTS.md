@@ -26,6 +26,7 @@
     "bin/",
     "lib/",
     "skills/",
+    "assets/",
     "install-agents.sh",
     "README.md"
   ],

@@ -1,55 +1,97 @@
-# @hexjasur/agents-md
+<div align="center">
+  <img src="./assets/agents-skills-mark.png" alt="Agent Skills modular mark" width="112" />
+  <h1>@hexjasur/agents-md</h1>
+  <p><strong>Safe project instructions. Modular skills. Modern web guidance.</strong></p>
+  <p>
+    A cross-platform installer and curated Agent Skills bundle for coding agents.
+  </p>
+  <p>
+    <a href="https://www.npmjs.com/package/@hexjasur/agents-md"><img src="https://img.shields.io/npm/v/%40hexjasur%2Fagents-md?logo=npm&logoColor=white&label=npm" alt="npm version" /></a>
+    <a href="https://www.npmjs.com/package/@hexjasur/agents-md"><img src="https://img.shields.io/npm/dm/%40hexjasur%2Fagents-md?logo=npm&logoColor=white&label=downloads" alt="npm monthly downloads" /></a>
+    <a href="https://github.com/hexjasur/AGENTS.md/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hexjasur/AGENTS.md?color=8b5cf6" alt="MIT license" /></a>
+    <a href="https://github.com/hexjasur/AGENTS.md"><img src="https://img.shields.io/github/stars/hexjasur/AGENTS.md?style=flat&logo=github" alt="GitHub stars" /></a>
+    <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white" alt="Node.js 18 or newer" /></a>
+  </p>
+</div>
 
-A safe, cross-platform installer for project-level `AGENTS.md` instructions and a curated bundle of modular [Agent Skills](https://agentskills.io/specification) for coding agents.
+<p align="center">
+  <img src="./assets/agents-skills-banner.png" alt="Abstract modular network representing reusable Agent Skills" width="100%" />
+</p>
 
-The package separates two layers:
+## Why this exists
 
-- `AGENTS.md` contains short, project-wide rules that should apply to every task.
-- `skills/<name>/SKILL.md` contains a focused capability that an agent loads only when its description matches the task.
+Coding agents need two different kinds of context. A repository needs a small set of global rules that always apply, while specialized work needs focused instructions that should load only when relevant. This project keeps those layers separate:
 
-The included web guidance is based on Google Chrome Modern Web Guidance, Lighthouse, web.dev, MDN, and Google Search Central. It covers modern platform-first development, performance, accessibility, security, and SEO.
+- `AGENTS.md` is the project-wide contract.
+- `skills/<name>/SKILL.md` is a focused, discoverable capability.
+- `references/` contains deeper material that is loaded only when needed.
+
+The result is less prompt noise, safer updates, and reusable guidance that can travel between projects and compatible agent clients.
+
+## What is included
+
+| Module | Best for |
+| --- | --- |
+| `modern-web-guidance` | Baseline-aware web architecture, native APIs, progressive enhancement, and modernization |
+| `web-performance` | Lighthouse, Core Web Vitals, loading, responsiveness, images, fonts, and layout stability |
+| `web-accessibility` | Semantic HTML, keyboard interaction, focus, forms, dialogs, contrast, and inclusive UI |
+| `web-security` | HTTPS, cookies, CSP, CORS, CSRF, input validation, auth boundaries, uploads, and secrets |
+| `web-seo` | Crawlability, metadata, canonical URLs, internal links, sitemap, robots, and structured data |
+| `repo-quality` | Minimal diffs, package-manager discipline, tests, builds, releases, and code review |
+| `skill-authoring` | Creating, validating, evaluating, and splitting Agent Skills |
+
+Web guidance is grounded in [Google Chrome Modern Web Guidance](https://codelabs.developers.google.com/codelabs/modern-web-guidance-101), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview), [web.dev](https://web.dev/learn), [MDN](https://developer.mozilla.org/en-US/docs/Web), and [Google Search Central](https://developers.google.com/search/docs/fundamentals/seo-starter-guide).
 
 ## Quick start
 
 Requirements: Node.js 18 or later.
 
-Install the bundled project instructions into the current directory:
+Install the bundled `AGENTS.md` into the current project:
 
 ```sh
 npx -y @hexjasur/agents-md
 ```
 
-Install into a specific project, or update a previous installation:
+Install into a selected project or update a previous installation:
 
 ```sh
 npx -y @hexjasur/agents-md init ./my-app
 npx -y @hexjasur/agents-md update ./my-app
 ```
 
-From a source checkout:
+Use the source checkout instead:
 
 ```sh
 ./install-agents.sh init ../my-project
 ./install-agents.sh update ../my-project
 ```
 
-## Included skills
+Inspect the CLI:
 
-| Skill | Use it for |
-| --- | --- |
-| `modern-web-guidance` | Baseline-aware web architecture, native platform APIs, modernization, and release readiness |
-| `web-performance` | Lighthouse, Core Web Vitals, loading, responsiveness, images, fonts, and layout stability |
-| `web-accessibility` | Semantic HTML, keyboard interaction, focus, forms, dialogs, contrast, and inclusive UI |
-| `web-security` | HTTPS, cookies, input validation, auth boundaries, CORS, CSP, uploads, and secrets |
-| `web-seo` | Crawlability, metadata, links, canonical URLs, sitemap, robots, and structured data |
-| `repo-quality` | Minimal diffs, package-manager discipline, tests, builds, releases, and code review |
-| `skill-authoring` | Creating, validating, evaluating, and splitting Agent Skills |
+```sh
+npx -y @hexjasur/agents-md --help
+npx -y @hexjasur/agents-md --version
+```
 
-Skills follow progressive disclosure: the catalog exposes metadata first, `SKILL.md` loads on activation, and `references/` files are read only for the relevant workstream.
+## How the architecture works
+
+```mermaid
+flowchart LR
+    A[Agent client] --> B[Project discovery]
+    B --> C[AGENTS.md\nGlobal contract]
+    B --> D[Skill catalog\nname + description]
+    D --> E[Activate matching\nSKILL.md]
+    E --> F[Load on demand\nreferences / scripts / assets]
+    C --> G[Implement safely]
+    F --> G
+    G --> H[Test, audit, verify]
+```
+
+Skills follow the [Agent Skills specification](https://agentskills.io/specification) and progressive disclosure model: metadata first, instructions on activation, and supporting resources only when required.
 
 ## Installation layout
 
-The current CLI installs `AGENTS.md` and records its version and SHA-256 hash in `.agent/hexjasurs.agent.scheme.json`:
+The CLI installs project instructions and records the package version and SHA-256 hash in a protected manifest:
 
 ```text
 my-app/
@@ -58,7 +100,7 @@ my-app/
     └── hexjasurs.agent.scheme.json
 ```
 
-The npm package also contains the reusable skill source:
+The package distributes the reusable skill source separately:
 
 ```text
 skills/
@@ -73,7 +115,7 @@ skills/
 └── skill-authoring/
 ```
 
-At this release, the CLI’s safe installer manages `AGENTS.md`. The skill directories are distributed as package assets so compatible clients can discover and install them. Per-project skill syncing is planned for a future CLI command; do not assume `skills install` exists yet.
+At version `1.1.0`, the CLI safely manages `AGENTS.md`; compatible clients can discover the bundled skills from the package. Per-project `skills install`, `skills update`, and per-skill manifests are planned for the next CLI phase.
 
 ## Safety model
 
@@ -81,18 +123,9 @@ Existing `AGENTS.md` files are never overwritten implicitly. Interactive `init` 
 
 The hash detects accidental or local edits; it is not a digital signature. Run the CLI from a trusted source and review the package before using it in sensitive repositories. Symlinked managed files and manifest paths are rejected.
 
-## CLI
-
-```text
-npx -y @hexjasur/agents-md [init] [directory]
-npx -y @hexjasur/agents-md update [directory] [--force]
-npx -y @hexjasur/agents-md --help
-npx -y @hexjasur/agents-md --version
-```
-
-The directory defaults to the current working directory. `init` is the default command.
-
 ## Development
+
+Run the full local verification suite:
 
 ```sh
 npm test
@@ -101,17 +134,27 @@ npm run verify
 npm pack --dry-run
 ```
 
-`validate:skills` uses the Agent Skills reference validator bundled with the development environment. Before publishing, inspect the tarball and verify that `skills/` is included.
+The checks cover the existing installer safety behavior, skill metadata, reference boundaries, and package contents. Before publishing, inspect the tarball and confirm that `skills/` is included.
 
 ## Design principles
 
-Keep skills coherent and short. Put non-obvious procedures in `SKILL.md`, detailed variants in `references/`, deterministic repeated work in `scripts/`, and reusable output files in `assets/` or templates. Do not turn one skill into a general encyclopedia.
+Keep each skill coherent and concise. Put non-obvious procedures in `SKILL.md`, detailed variants in `references/`, deterministic repeated work in `scripts/`, and reusable output files in assets or templates. Do not turn a skill into a general encyclopedia.
 
-For web work, choose and document a Baseline target, measure before optimizing, preserve semantic and keyboard-accessible behavior, protect every trust boundary, and validate public routes as rendered pages. A Lighthouse score is evidence for investigation, not a substitute for real-user data or functional testing.
+For web work, choose and document a Baseline target, measure before optimizing, preserve semantic and keyboard-accessible behavior, protect every trust boundary, and validate public routes as rendered pages. Lighthouse is evidence for investigation, not a substitute for real-user data or functional testing.
+
+## Contributing
+
+1. Read the global `AGENTS.md` rules.
+2. Make one logical change with a focused diff.
+3. Add or update tests for behavior changes.
+4. Run `npm run verify`.
+5. Validate every changed skill against the Agent Skills specification.
+6. Update README examples when the public interface changes.
 
 ## Official references
 
 - [Agent Skills specification](https://agentskills.io/specification)
+- [Best practices for skill creators](https://agentskills.io/skill-creation/best-practices.md)
 - [Google Chrome Modern Web Guidance 101](https://codelabs.developers.google.com/codelabs/modern-web-guidance-101)
 - [Modern Web Guidance repository](https://github.com/GoogleChrome/modern-web-guidance)
 - [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)
@@ -122,4 +165,4 @@ For web work, choose and document a Baseline target, measure before optimizing, 
 ## Links
 
 - Repository and issues: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
-- License: MIT
+- License: [MIT](./LICENSE)
