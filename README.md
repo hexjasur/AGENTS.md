@@ -52,6 +52,23 @@ Install the bundled `AGENTS.md` into the current project:
 npx -y @hexjasur/agents-md
 ```
 
+### Download without npm
+
+Every version release also publishes ready-to-download archives on [GitHub Releases](https://github.com/hexjasur/AGENTS.md/releases):
+
+- `agents-md-skills-vX.Y.Z.zip` — only the modular `skills/` bundle.
+- `agents-md-bundle-vX.Y.Z.zip` — `AGENTS.md`, all skills, README, and license.
+- `SHA256SUMS.txt` — checksums for verifying the downloads.
+
+```sh
+VERSION=1.1.0
+curl -L -o agents-md-bundle.zip \
+  "https://github.com/hexjasur/AGENTS.md/releases/download/v${VERSION}/agents-md-bundle-v${VERSION}.zip"
+unzip agents-md-bundle.zip
+```
+
+The release workflow reads `package.json#version` on every relevant `main` push. If `v<version>` does not exist yet, it verifies the repository, creates both archives, calculates checksums, and publishes the GitHub Release automatically. Re-running the workflow is safe because an existing version is skipped.
+
 Install into a selected project or update a previous installation:
 
 ```sh
@@ -117,6 +134,8 @@ skills/
 
 At version `1.1.0`, the CLI safely manages `AGENTS.md`; compatible clients can discover the bundled skills from the package. Per-project `skills install`, `skills update`, and per-skill manifests are planned for the next CLI phase.
 
+The release archives are the convenient path for users who do not want to run `npx`: download the bundle, extract it, and copy the required `AGENTS.md` or `skills/` directory into the target project.
+
 ## Safety model
 
 Existing `AGENTS.md` files are never overwritten implicitly. Interactive `init` can cancel, delete, or replace after an explicit choice. `update` compares the installed file’s SHA-256 hash with the manifest and stops if local edits are detected unless `--force` is supplied.
@@ -133,6 +152,8 @@ npm run validate:skills
 npm run verify
 npm pack --dry-run
 ```
+
+The release workflow lives at [`.github/workflows/release.yml`](./.github/workflows/release.yml). To publish a new release, update `package.json` to a new semantic version, commit the change to `main`, and push. Do not create the version tag manually; the workflow creates the tag through GitHub Release creation after verification.
 
 The checks cover the existing installer safety behavior, skill metadata, reference boundaries, and package contents. Before publishing, inspect the tarball and confirm that `skills/` is included.
 
