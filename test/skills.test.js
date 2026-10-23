@@ -8,10 +8,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const skillsRoot = path.join(root, 'skills');
 
 function parseFrontmatter(content) {
-  const match = content.match(/^---\n([\s\S]*?)\n---\n/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
   assert.ok(match, 'SKILL.md must start with YAML frontmatter');
   const fields = new Map();
-  for (const line of match[1].split('\n')) {
+  for (const line of match[1].split(/\r?\n/)) {
     const field = line.match(/^([a-z-]+):\s*(.*)$/);
     if (field) fields.set(field[1], field[2].replace(/^['"]|['"]$/g, ''));
   }

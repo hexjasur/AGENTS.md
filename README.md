@@ -46,10 +46,16 @@ Web guidance is grounded in [Google Chrome Modern Web Guidance](https://codelabs
 
 Requirements: Node.js 18 or later.
 
-Install the bundled `AGENTS.md` into the current project:
+Install `AGENTS.md` and the bundled skills into the current project. The CLI shows a summary and asks for confirmation; enter `y` to continue or press Enter / enter `n` to cancel:
 
 ```sh
 npx -y @hexjasur/agents-md
+```
+
+Use `--yes` to skip the initial confirmation in scripts. This does not overwrite existing files:
+
+```sh
+npx -y @hexjasur/agents-md --yes
 ```
 
 ### Download without npm
@@ -108,13 +114,23 @@ Skills follow the [Agent Skills specification](https://agentskills.io/specificat
 
 ## Installation layout
 
-The CLI installs project instructions and records the package version and SHA-256 hash in a protected manifest:
+The CLI installs project instructions and skills and records the package version and `AGENTS.md` SHA-256 hash in a protected manifest:
 
 ```text
 my-app/
 ├── AGENTS.md
 └── .agent/
-    └── hexjasurs.agent.scheme.json
+    ├── hexjasurs.agent.scheme.json
+    └── skills/
+        ├── modern-web-guidance/
+        │   ├── SKILL.md
+        │   └── references/
+        ├── web-performance/
+        ├── web-accessibility/
+        ├── web-security/
+        ├── web-seo/
+        ├── repo-quality/
+        └── skill-authoring/
 ```
 
 The package distributes the reusable skill source separately:
@@ -132,13 +148,13 @@ skills/
 └── skill-authoring/
 ```
 
-At version `1.2.0`, the CLI safely manages `AGENTS.md`; compatible clients can discover the bundled skills from the package. Per-project `skills install`, `skills update`, and per-skill manifests are planned for the next CLI phase.
+The CLI copies bundled skills into `.agent/skills`. If a skill directory with the same name already exists, it is kept unchanged; missing bundled skills are added. If `AGENTS.md` already exists, the default action keeps it and installs missing skills. `--yes` also keeps an existing `AGENTS.md` without prompting. `update` can add missing skills but does not overwrite existing skill directories. The manifest tracks `AGENTS.md`, not individual skill files; when keeping a user-owned `AGENTS.md`, no manifest is created for it.
 
 The release archives are the convenient path for users who do not want to run `npx`: download the bundle, extract it, and copy the required `AGENTS.md` or `skills/` directory into the target project.
 
 ## Safety model
 
-Existing `AGENTS.md` files are never overwritten implicitly. Interactive `init` can cancel, delete, or replace after an explicit choice. `update` compares the installed file’s SHA-256 hash with the manifest and stops if local edits are detected unless `--force` is supplied.
+Installation requires confirmation unless `--yes` is supplied. Existing `AGENTS.md` files are never overwritten implicitly. Interactive `init` can keep the file and install missing skills, cancel, delete, or replace after an explicit choice. Existing skill directories are kept unchanged. `update` compares the installed file’s SHA-256 hash with the manifest and stops if local edits are detected unless `--force` is supplied.
 
 The hash detects accidental or local edits; it is not a digital signature. Run the CLI from a trusted source and review the package before using it in sensitive repositories. Symlinked managed files and manifest paths are rejected.
 
