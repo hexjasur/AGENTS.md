@@ -1,6 +1,6 @@
 {
   "name": "@hexjasur/agents-md",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Install safe AGENTS.md instructions and modular Agent Skills for coding agents",
   "license": "MIT",
   "type": "module",
