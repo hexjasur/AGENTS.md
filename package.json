@@ -1,19 +1,20 @@
 {
   "name": "@hexjasur/agents-md",
-  "version": "1.0.1",
-  "description": "Install and update AGENTS.md instructions for AI coding agents",
+  "version": "1.1.0",
+  "description": "Install safe AGENTS.md instructions and modular Agent Skills for coding agents",
   "license": "MIT",
   "type": "module",
   "keywords": [
     "agents.md",
+    "agent skills",
+    "skills",
     "ai agents",
     "coding agents",
-    "agent instructions",
-    "developer tools",
-    "project setup",
-    "github copilot",
-    "claude code",
-    "cursor",
+    "modern web guidance",
+    "web performance",
+    "accessibility",
+    "seo",
+    "security",
     "cli"
   ],
   "bin": {
@@ -24,11 +25,14 @@
     "LICENSE",
     "bin/",
     "lib/",
+    "skills/",
     "install-agents.sh",
     "README.md"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "validate:skills": "node --test test/skills.test.js",
+    "verify": "npm test && npm run validate:skills && npm pack --dry-run"
   },
   "engines": {
     "node": ">=18"

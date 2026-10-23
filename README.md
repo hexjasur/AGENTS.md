@@ -1,32 +1,55 @@
 # @hexjasur/agents-md
 
-Install and update the [`AGENTS.md`](./AGENTS.md) instructions for AI coding agents with a small, cross-platform CLI. Use it through npm/npx or the included shell script.
+A safe, cross-platform installer for project-level `AGENTS.md` instructions and a curated bundle of modular [Agent Skills](https://agentskills.io/specification) for coding agents.
 
-**Requirements:** Node.js 18 or later.
+The package separates two layers:
 
-## What it does
+- `AGENTS.md` contains short, project-wide rules that should apply to every task.
+- `skills/<name>/SKILL.md` contains a focused capability that an agent loads only when its description matches the task.
 
-- Installs this repository's `AGENTS.md` into a target project's root.
-- Records the installed version and file hash in `.agent/hexjasurs.agent.scheme.json`.
-- Protects existing files from accidental replacement or removal.
-- Updates installations safely and migrates the manifest from version 1.0.0.
+The included web guidance is based on Google Chrome Modern Web Guidance, Lighthouse, web.dev, MDN, and Google Search Central. It covers modern platform-first development, performance, accessibility, security, and SEO.
 
-## Quick start with npx
+## Quick start
 
-Run this command from the project where you want to install the instructions:
+Requirements: Node.js 18 or later.
+
+Install the bundled project instructions into the current directory:
 
 ```sh
 npx -y @hexjasur/agents-md
 ```
 
-Install into a specific project or update an existing installation:
+Install into a specific project, or update a previous installation:
 
 ```sh
 npx -y @hexjasur/agents-md init ./my-app
 npx -y @hexjasur/agents-md update ./my-app
 ```
 
-The installer creates this layout:
+From a source checkout:
+
+```sh
+./install-agents.sh init ../my-project
+./install-agents.sh update ../my-project
+```
+
+## Included skills
+
+| Skill | Use it for |
+| --- | --- |
+| `modern-web-guidance` | Baseline-aware web architecture, native platform APIs, modernization, and release readiness |
+| `web-performance` | Lighthouse, Core Web Vitals, loading, responsiveness, images, fonts, and layout stability |
+| `web-accessibility` | Semantic HTML, keyboard interaction, focus, forms, dialogs, contrast, and inclusive UI |
+| `web-security` | HTTPS, cookies, input validation, auth boundaries, CORS, CSP, uploads, and secrets |
+| `web-seo` | Crawlability, metadata, links, canonical URLs, sitemap, robots, and structured data |
+| `repo-quality` | Minimal diffs, package-manager discipline, tests, builds, releases, and code review |
+| `skill-authoring` | Creating, validating, evaluating, and splitting Agent Skills |
+
+Skills follow progressive disclosure: the catalog exposes metadata first, `SKILL.md` loads on activation, and `references/` files are read only for the relevant workstream.
+
+## Installation layout
+
+The current CLI installs `AGENTS.md` and records its version and SHA-256 hash in `.agent/hexjasurs.agent.scheme.json`:
 
 ```text
 my-app/
@@ -35,83 +58,68 @@ my-app/
     └── hexjasurs.agent.scheme.json
 ```
 
-## Run from a source checkout
+The npm package also contains the reusable skill source:
 
-From the repository root, use the shell entry point:
-
-```sh
-./install-agents.sh
-./install-agents.sh init ../my-project
-./install-agents.sh update ../my-project
+```text
+skills/
+├── modern-web-guidance/
+│   ├── SKILL.md
+│   └── references/
+├── web-performance/
+├── web-accessibility/
+├── web-security/
+├── web-seo/
+├── repo-quality/
+└── skill-authoring/
 ```
 
-Both entry points call the same Node.js implementation. The shell entry point requires a POSIX-compatible shell, such as Linux, macOS, WSL, or Git Bash.
+At this release, the CLI’s safe installer manages `AGENTS.md`. The skill directories are distributed as package assets so compatible clients can discover and install them. Per-project skill syncing is planned for a future CLI command; do not assume `skills install` exists yet.
 
-## CLI reference
+## Safety model
+
+Existing `AGENTS.md` files are never overwritten implicitly. Interactive `init` can cancel, delete, or replace after an explicit choice. `update` compares the installed file’s SHA-256 hash with the manifest and stops if local edits are detected unless `--force` is supplied.
+
+The hash detects accidental or local edits; it is not a digital signature. Run the CLI from a trusted source and review the package before using it in sensitive repositories. Symlinked managed files and manifest paths are rejected.
+
+## CLI
 
 ```text
 npx -y @hexjasur/agents-md [init] [directory]
 npx -y @hexjasur/agents-md update [directory] [--force]
 npx -y @hexjasur/agents-md --help
+npx -y @hexjasur/agents-md --version
 ```
 
-The directory defaults to the current working directory, and `init` is the default command. Run `npx -y @hexjasur/agents-md --help` for the full command summary.
+The directory defaults to the current working directory. `init` is the default command.
 
-## Existing-file safety
-
-If the destination already contains `AGENTS.md`, the interactive `init` command asks whether to delete, replace, or cancel. Cancel is the default, so pressing Enter leaves the existing file unchanged. Non-interactive runs also preserve the existing file.
-
-Before updating or removing a managed file, the CLI compares its SHA-256 hash with the installation record. If the file was edited, the operation stops unless `--force` is explicitly supplied to `update`:
-
-```sh
-npx -y @hexjasur/agents-md update ./my-app --force
-```
-
-`--force` is only supported by `update`. During `init`, replacing an existing file requires an explicit interactive choice.
-
-## Update behavior
-
-The installer checks the recorded SHA-256 hash before updating or removing a managed `AGENTS.md`. If you have edited the file, review or back up your changes before choosing to force an update:
-
-```sh
-npx -y @hexjasur/agents-md update ./my-app --force
-```
-
-Use `--force` only when you intend to replace the edited instructions with the package's current version.
-
-## Installation record
-
-The CLI keeps its installation record at `.agent/hexjasurs.agent.scheme.json`. It contains the record schema version, installed package version, installation timestamp, and SHA-256 hash of the installed `AGENTS.md`.
-
-The record is validated before use. Invalid JSON, schema, version, timestamp, or hash causes the operation to stop. Symlinked target files and metadata paths are rejected. When updating an installation created by version 1.0.0, the CLI reads its record from `.agents-md/installation.json`, writes it to the new location, and removes the old directory if it is empty.
-
-The hash detects accidental or local edits; it is not a digital signature. Anyone able to edit both the file and its record can change both. Only run the CLI from a trusted source.
-
-## Troubleshooting
-
-- **An `AGENTS.md` already exists:** Run the command in an interactive terminal and choose whether to replace or keep it. The default is to keep it.
-- **Update says the file was modified:** Review your changes. Run `update --force` only if you want to replace them with the packaged instructions.
-- **Node.js version error:** Install Node.js 18 or later, then run the command again.
-
-## Development and release checks
+## Development
 
 ```sh
 npm test
+npm run validate:skills
+npm run verify
 npm pack --dry-run
 ```
 
-To test the package contents locally, create a tarball with `npm pack`, install it into a temporary project, and run the generated `agents-md` executable.
+`validate:skills` uses the Agent Skills reference validator bundled with the development environment. Before publishing, inspect the tarball and verify that `skills/` is included.
 
-Before publishing a release:
+## Design principles
 
-1. Confirm that the npm account has publish access to the package scope.
-2. Run the tests and review `npm pack --dry-run`.
-3. Set a new version in `package.json`.
-4. Publish a public scoped package with `npm publish --access public`.
+Keep skills coherent and short. Put non-obvious procedures in `SKILL.md`, detailed variants in `references/`, deterministic repeated work in `scripts/`, and reusable output files in `assets/` or templates. Do not turn one skill into a general encyclopedia.
 
-Publishing to npm does not push changes to the Git repository.
+For web work, choose and document a Baseline target, measure before optimizing, preserve semantic and keyboard-accessible behavior, protect every trust boundary, and validate public routes as rendered pages. A Lighthouse score is evidence for investigation, not a substitute for real-user data or functional testing.
 
-## Project links
+## Official references
 
-- Repository and issue tracker: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
+- [Agent Skills specification](https://agentskills.io/specification)
+- [Google Chrome Modern Web Guidance 101](https://codelabs.developers.google.com/codelabs/modern-web-guidance-101)
+- [Modern Web Guidance repository](https://github.com/GoogleChrome/modern-web-guidance)
+- [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)
+- [web.dev Learn](https://web.dev/learn)
+- [Google Search SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)
+- [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web)
+
+## Links
+
+- Repository and issues: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
 - License: MIT
