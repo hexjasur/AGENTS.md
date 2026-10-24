@@ -64,6 +64,7 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `github-actions` | Workflows, least-privilege permissions, pinned actions, caching, releases, and hardening |
 | `renpy-visual-novel` | Ren'Py visual novels and AVNs: script structure, define/default, saves, translation, and builds |
 | `renpy-ui-screens` | Ren'Py GUI and screens: gui.rpy, styles, ATL, PNG-free UI, accessibility, and touch |
+| `renpy-main-menu-design` | Modern card-grid Ren'Py main menus: hero art, art tiles, Continue-from-save card, hover motion, and touch layouts |
 | `tauri-best-practices` | Tauri v2 apps: capabilities, CSP, Rust commands and IPC, testing, size, CI, and signing |
 | `tauri-auto-update` | Tauri auto-update: signed updater artifacts, `latest.json`, GitHub Releases pipeline, and in-app update flow |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |

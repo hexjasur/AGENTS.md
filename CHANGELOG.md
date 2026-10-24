@@ -8,7 +8,7 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ### Added
 
-- Skills: `renpy-visual-novel` and `renpy-ui-screens` for Ren'Py visual novels and AVNs.
+- Skills: `renpy-visual-novel`, `renpy-ui-screens`, and `renpy-main-menu-design` (modern card-grid main menus) for Ren'Py visual novels and AVNs.
 - Skills: `tauri-best-practices` and `tauri-auto-update` for Tauri v2 apps and signed, user-confirmed auto-updates through GitHub Releases.
 - Skills: `react-typescript`, `ui-ux-design`, `testing-web`, and `github-actions`.
 - Installer: `--skills <list>` and `--list-skills` to install only the skills you need.

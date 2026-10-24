@@ -59,4 +59,4 @@ Snippets for a PNG-free glass-style UI, a toast notification, choices, preferenc
 
 For a review: list issues by severity (unusable, inaccessible, broken on touch or small screens, performance, polish), each with file and line, the cause, and the fix. State resolutions and variants tested.
 
-Read `references/screens-reference.md` for screen, style, and ATL examples.
+Read `references/screens-reference.md` for screen, style, and ATL examples. For a cinematic card-grid main menu, use `renpy-main-menu-design`.
