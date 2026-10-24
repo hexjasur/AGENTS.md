@@ -3,8 +3,8 @@
   <h1>@hexjasur/agents-md</h1>
   <p><strong>Stop re-explaining your stack to your AI. Install it once.</strong></p>
   <p>
-    Project rules and expert Agent Skills for <b>web</b>, <b>React</b>, <b>Tauri</b>, and <b>Ren'Py visual novels</b>,
-    installed into any repo with one command.
+    Project rules and expert Agent Skills for <b>React and the modern web</b>, <b>Tauri apps</b>, <b>CI/CD</b>,
+    and <b>Ren'Py visual novels</b>, installed into any repo with one command.
   </p>
   <p>
     <a href="https://www.npmjs.com/package/@hexjasur/agents-md"><img src="https://img.shields.io/npm/v/%40hexjasur%2Fagents-md?logo=npm&logoColor=white&label=npm" alt="npm version" /></a>
@@ -28,7 +28,7 @@ It shows what it will install, asks `Continue with installation? [y/N]`, and on 
 
 ```text
 AGENTS.md                              the project-wide contract for your agent
-.agent/skills/                         the skills you chose (default: all 15)
+.agent/skills/                         the skills you chose (default: all 16)
 .agent/hexjasurs.agent.scheme.json     version and SHA-256 manifest for safe updates
 ```
 
@@ -38,51 +38,21 @@ Works with any agent client that reads `AGENTS.md` and Agent Skills. Existing fi
 
 | You build… | Install | Your agent stops… |
 | --- | --- | --- |
-| **Visual novels and AVNs in Ren'Py** | `--skills renpy-visual-novel,renpy-ui-screens` | using `define` for changing variables, breaking saves between episodes, and fighting the GUI |
-| **Tauri desktop apps** | `--skills tauri-best-practices,tauri-auto-update` | granting broad permissions, shipping unsigned updates, and publishing a `latest.json` that misses a platform |
 | **React and TypeScript apps** | `--skills react-typescript,ui-ux-design,testing-web` | syncing state with effects, casting to `any`, and writing flaky tests |
 | **Any web project** | *(all skills)* | guessing at performance, accessibility, security, and SEO |
+| **Tauri desktop apps** | `--skills tauri-best-practices,tauri-auto-update` | granting broad permissions, shipping unsigned updates, and publishing a `latest.json` that misses a platform |
 | **Any repository** | `--skills repo-quality,github-actions` | leaving broad CI permissions, unpinned actions, and unreviewable diffs |
+| **Visual novels and AVNs in Ren'Py** | `--skills renpy-visual-novel,renpy-ui-screens,renpy-main-menu-design` | using `define` for changing variables, breaking saves between episodes, and shipping a stock-looking menu |
 
 ```sh
 npx -y @hexjasur/agents-md --list-skills                                   # see every skill
-npx -y @hexjasur/agents-md --skills renpy-visual-novel,renpy-ui-screens    # install just these
+npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # install just these
 ```
-
-## Making a visual novel or AVN in Ren'Py?
-
-Two skills built for VN and AVN developers, based on the official Ren'Py documentation:
-
-- **`renpy-visual-novel`** covers project structure, `define` vs `default` vs `persistent`, rollback-safe state, lint-clean scripts, translations, and PC, Android, web, and itch.io builds. It includes a checklist for **episodic releases**, so new episodes do not break players' saves.
-- **`renpy-ui-screens`** covers the GUI workflow, `gui.rpy`, screen language, styles, ATL transitions, **PNG-free glass-style UI** with solid colors, accessibility, and touch and gamepad support.
-
-Try prompts like:
-
-> "My game forgets choices after rollback, what's wrong?"
->
-> "I'm releasing episode 2 of my AVN. How do I keep episode 1 saves working?"
->
-> "Make my choice menu look like dark glass panels without any image files."
-
-## Shipping a Tauri app with auto-update?
-
-`tauri-auto-update` encodes a complete, safe update pipeline for Tauri v2 and GitHub Releases:
-
-1. Signed updater artifacts and a fixed `latest/download/latest.json` endpoint.
-2. A version-sync check across `package.json`, `tauri.conf.json`, `Cargo.toml`, and the changelog.
-3. A draft-first release pipeline that builds every platform, **verifies `latest.json`**, and only then publishes.
-4. A user-confirmed in-app update flow with progress and relaunch.
-
-It also records the traps that bite in production: a manifest missing a platform, Linux updates needing AppImage, drafts never being served as `latest`, and losing the signing key. Pair it with `tauri-best-practices` for capabilities, CSP, commands, testing, and size.
 
 ## What is included
 
 | Area | Skill | Best for |
 | --- | --- | --- |
-| Ren'Py | `renpy-visual-novel` | Script structure, state, saves and updates, translation, builds, itch.io |
-| Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
-| Tauri | `tauri-best-practices` | Capabilities, CSP, Rust commands and IPC, testing, bundle size, CI, signing |
-| Tauri | `tauri-auto-update` | Signed updates, `latest.json`, release pipeline, in-app update flow |
 | Frontend | `react-typescript` | React 19+ components, hooks, state and effects, strict TypeScript, forms, Tailwind |
 | Frontend | `ui-ux-design` | Design tokens, hierarchy, dark and glass UI, motion, states, UI review |
 | Frontend | `testing-web` | Vitest, Testing Library, Playwright, MSW, flaky tests, CI |
@@ -91,9 +61,14 @@ It also records the traps that bite in production: a manifest missing a platform
 | Web platform | `web-accessibility` | WCAG 2.2, semantic HTML, keyboard, focus, forms, dialogs, contrast |
 | Web platform | `web-security` | HTTPS, cookies, CSP, CORS, CSRF, validation, uploads, secrets |
 | Web platform | `web-seo` | Crawlability, metadata, canonical URLs, sitemaps, structured data |
+| Tauri | `tauri-best-practices` | Capabilities, CSP, Rust commands and IPC, testing, bundle size, CI, signing |
+| Tauri | `tauri-auto-update` | Signed updates, `latest.json`, release pipeline, in-app update flow |
 | Engineering | `repo-quality` | Minimal diffs, tests, builds, releases, code review |
 | Engineering | `github-actions` | Least-privilege workflows, pinned actions, caching, releases, hardening |
 | Engineering | `skill-authoring` | Writing, evaluating, and splitting Agent Skills and `AGENTS.md` |
+| Ren'Py | `renpy-visual-novel` | Script structure, state, saves and updates, translation, builds, itch.io |
+| Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
+| Ren'Py | `renpy-main-menu-design` | Modern card-grid main menus: hero art, art tiles, Continue-from-save card |
 
 Every skill has a precise trigger description, a procedure, hard guardrails, real-world gotchas, a report format, and links to official sources. Each one is covered by eval prompts in [`evals/`](./evals).
 
@@ -129,6 +104,33 @@ unzip agents-md-bundle.zip
 ```
 
 From a source checkout: `./install-agents.sh init ../my-project`.
+
+## Shipping a Tauri app with auto-update?
+
+`tauri-auto-update` encodes a complete, safe update pipeline for Tauri v2 and GitHub Releases:
+
+1. Signed updater artifacts and a fixed `latest/download/latest.json` endpoint.
+2. A version-sync check across `package.json`, `tauri.conf.json`, `Cargo.toml`, and the changelog.
+3. A draft-first release pipeline that builds every platform, **verifies `latest.json`**, and only then publishes.
+4. A user-confirmed in-app update flow with progress and relaunch.
+
+It also records the traps that bite in production: a manifest missing a platform, Linux updates needing AppImage, drafts never being served as `latest`, and losing the signing key. Pair it with `tauri-best-practices` for capabilities, CSP, commands, testing, and size.
+
+## Making a visual novel or AVN in Ren'Py?
+
+Three skills built for VN and AVN developers, based on the official Ren'Py documentation:
+
+- **`renpy-visual-novel`** covers project structure, `define` vs `default` vs `persistent`, rollback-safe state, lint-clean scripts, translations, and PC, Android, web, and itch.io builds. It includes a checklist for **episodic releases**, so new episodes do not break players' saves.
+- **`renpy-ui-screens`** covers the GUI workflow, `gui.rpy`, screen language, styles, ATL transitions, **PNG-free glass-style UI** with solid colors, accessibility, and touch and gamepad support.
+- **`renpy-main-menu-design`** replaces the stock text-list menu with a **cinematic card-grid main menu**: full-bleed hero art, a scrim, pill-shaped info bars, large art tiles, a Continue card that shows your latest save, hover motion, and a touch layout. It includes layout ideas and complete code.
+
+Try prompts like:
+
+> "My game forgets choices after rollback, what's wrong?"
+>
+> "I'm releasing episode 2 of my AVN. How do I keep episode 1 saves working?"
+>
+> "My main menu is a boring text list. Make it look modern, with art cards and a Continue button that shows my last save."
 
 ## How it works
 
