@@ -1,0 +1,33 @@
+{
+  "skill": "renpy-visual-novel",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my renpy game forgets my choices after I rollback, what am I doing wrong?",
+      "should_trigger": true,
+      "assertions": [
+        "Checks whether changing variables are declared with default, not define or init python",
+        "Explains that define and init python values are not saved or rolled back",
+        "Shows a corrected default declaration"
+      ]
+    },
+    {
+      "id": "update-edge",
+      "prompt": "I'm releasing episode 2 of my AVN, how do I not break people's saves from episode 1?",
+      "should_trigger": true,
+      "assertions": [
+        "Says to add new variables with default and never rename or remove old ones without migration",
+        "Mentions after_load or config.after_load_callbacks and testing with real old saves",
+        "Warns against changing config.save_directory and says to bump config.version"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write a python script that renames files in a folder",
+      "should_trigger": false,
+      "assertions": [
+        "The renpy skills are not loaded"
+      ]
+    }
+  ]
+}

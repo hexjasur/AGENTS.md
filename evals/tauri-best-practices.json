@@ -1,0 +1,32 @@
+{
+  "skill": "tauri-best-practices",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "review my tauri v2 app for security problems",
+      "should_trigger": true,
+      "assertions": [
+        "Reviews capabilities for least privilege per window label",
+        "Checks that a CSP is configured and no remote scripts are loaded",
+        "Checks command inputs are validated in Rust and errors are returned as Result"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my invoke call says missing required key but the rust arg is user_name",
+      "should_trigger": true,
+      "assertions": [
+        "Explains arguments are camelCase by default on the frontend",
+        "Offers rename_all as an alternative"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "explain what a closure is in javascript",
+      "should_trigger": false,
+      "assertions": [
+        "The tauri skills are not loaded"
+      ]
+    }
+  ]
+}

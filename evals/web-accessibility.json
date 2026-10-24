@@ -1,0 +1,32 @@
+{
+  "skill": "web-accessibility",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "audit my modal for accessibility",
+      "should_trigger": true,
+      "assertions": [
+        "Checks focus moves into the dialog and returns on close",
+        "Checks Escape closes it and the background is inert",
+        "Reports issues with WCAG criterion, impact, and fix"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "screen reader doesn't announce my form errors",
+      "should_trigger": true,
+      "assertions": [
+        "Associates errors with fields and announces them",
+        "Uses a live region that exists before the update"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "optimize my docker image size",
+      "should_trigger": false,
+      "assertions": [
+        "The accessibility skill is not loaded"
+      ]
+    }
+  ]
+}

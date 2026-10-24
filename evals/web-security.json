@@ -1,0 +1,33 @@
+{
+  "skill": "web-security",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "is it ok to store my jwt in localstorage",
+      "should_trigger": true,
+      "assertions": [
+        "Explains XSS can read localStorage tokens",
+        "Recommends HttpOnly, Secure, SameSite cookies or server sessions",
+        "Mentions CSRF defenses when using cookies"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "add file uploads to my express app safely",
+      "should_trigger": true,
+      "assertions": [
+        "Validates type by content, limits size, and renames files",
+        "Stores outside the web root or on object storage and serves from a separate origin",
+        "Checks authorization for each file access"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write a blog post intro about cooking",
+      "should_trigger": false,
+      "assertions": [
+        "The security skill is not loaded"
+      ]
+    }
+  ]
+}

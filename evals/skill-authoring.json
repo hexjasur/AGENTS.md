@@ -1,0 +1,32 @@
+{
+  "skill": "skill-authoring",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "help me write a skill for deploying to fly.io",
+      "should_trigger": true,
+      "assertions": [
+        "Defines the task and what agents get wrong without it",
+        "Writes a description with what and when to use it",
+        "Keeps SKILL.md focused and moves detail to references"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my agents.md is 600 lines and agents ignore half of it",
+      "should_trigger": true,
+      "assertions": [
+        "Recommends shortening and moving detail into skills or nested AGENTS.md",
+        "Puts commands and boundaries first"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "summarize this meeting transcript",
+      "should_trigger": false,
+      "assertions": [
+        "The skill-authoring skill is not loaded"
+      ]
+    }
+  ]
+}

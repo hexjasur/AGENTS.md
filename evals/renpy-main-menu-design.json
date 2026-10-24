@@ -1,0 +1,43 @@
+{
+  "skill": "renpy-main-menu-design",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my renpy main menu is just a boring text list, how can I make it look modern and not like renpy",
+      "should_trigger": true,
+      "assertions": [
+        "Proposes a layout concept such as a hero background with a row of art tiles",
+        "Keeps Start, Load, Preferences and Quit reachable",
+        "Mentions a scrim or gradient for readable labels"
+      ]
+    },
+    {
+      "id": "continue-card",
+      "prompt": "I want a Continue button on the main menu that shows a thumbnail of my last save",
+      "should_trigger": true,
+      "assertions": [
+        "Uses renpy.newest_slot evaluated once and FileScreenshot with the slot",
+        "Handles the no-saves case with a disabled tile",
+        "Loads the newest save with FileLoad"
+      ]
+    },
+    {
+      "id": "mobile-edge",
+      "prompt": "the fancy menu has hover effects but it's unusable on android",
+      "should_trigger": true,
+      "assertions": [
+        "Explains touch devices have no hover and tiles must be normal buttons",
+        "Adds a small variant with larger touch targets",
+        "Gates Quit with renpy.variant pc"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "how do I add a save slot name field in renpy",
+      "should_trigger": false,
+      "assertions": [
+        "The main menu design skill is not the primary skill loaded"
+      ]
+    }
+  ]
+}

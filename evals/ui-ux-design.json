@@ -1,0 +1,33 @@
+{
+  "skill": "ui-ux-design",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "make my settings page look more premium, dark with a bit of blur",
+      "should_trigger": true,
+      "assertions": [
+        "Defines tokens before styling",
+        "Uses a translucent surface with a border and a solid fallback for backdrop-filter",
+        "Checks contrast and adds reduced-motion handling"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "the text on my glass cards is hard to read over the gradient background",
+      "should_trigger": true,
+      "assertions": [
+        "Checks contrast against the lightest part of the backdrop",
+        "Adds a scrim or increases surface opacity",
+        "Does not just increase font weight"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "fix a null pointer exception in my java service",
+      "should_trigger": false,
+      "assertions": [
+        "The ui skill is not loaded"
+      ]
+    }
+  ]
+}

@@ -114,3 +114,42 @@ test('AGENTS.md version matches package.json', async () => {
   const agents = await readFile(path.join(root, 'AGENTS.md'), 'utf8');
   assert.match(agents, new RegExp(`^Version: ${pkg.version.replace(/\./g, '\\.')}$`, 'm'));
 });
+
+test('every skill has an eval file with positive, edge, and negative prompts', async () => {
+  const evalsRoot = path.join(root, 'evals');
+  const skills = (await readdir(skillsRoot, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name).sort();
+  const evalFiles = (await readdir(evalsRoot)).filter((file) => file.endsWith('.json')).map((file) => file.replace(/\.json$/, '')).sort();
+  assert.deepEqual(evalFiles, skills, 'evals/ must contain exactly one <skill>.json per skill');
+
+  for (const skill of skills) {
+    const data = JSON.parse(await readFile(path.join(evalsRoot, `${skill}.json`), 'utf8'));
+    assert.equal(data.skill, skill);
+    assert.ok(Array.isArray(data.evals) && data.evals.length >= 3, `${skill}: needs at least 3 eval prompts`);
+    const ids = new Set();
+    for (const item of data.evals) {
+      assert.ok(typeof item.id === 'string' && !ids.has(item.id), `${skill}: eval ids must be unique`);
+      ids.add(item.id);
+      assert.ok(typeof item.prompt === 'string' && item.prompt.length > 10, `${skill}/${item.id}: prompt required`);
+      assert.equal(typeof item.should_trigger, 'boolean');
+      assert.ok(Array.isArray(item.assertions) && item.assertions.length >= 1, `${skill}/${item.id}: assertions required`);
+    }
+    assert.ok(data.evals.some((item) => item.should_trigger === false), `${skill}: needs a negative prompt`);
+    assert.ok(data.evals.filter((item) => item.should_trigger).length >= 2, `${skill}: needs at least 2 positive prompts`);
+  }
+});
+
+test('AGENTS.md and README list every bundled skill', async () => {
+  const skills = (await readdir(skillsRoot, { withFileTypes: true })).filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+  const agents = await readFile(path.join(root, 'AGENTS.md'), 'utf8');
+  const readme = await readFile(path.join(root, 'README.md'), 'utf8');
+  for (const skill of skills) {
+    assert.ok(agents.includes(`\`${skill}\``), `AGENTS.md is missing ${skill}`);
+    assert.ok(readme.includes(skill), `README.md is missing ${skill}`);
+  }
+});
+
+test('community files exist', async () => {
+  for (const file of ['CONTRIBUTING.md', 'SECURITY.md', 'CODE_OF_CONDUCT.md', 'CHANGELOG.md', '.github/workflows/ci.yml', '.github/dependabot.yml', '.github/pull_request_template.md']) {
+    assert.equal((await stat(path.join(root, file))).isFile(), true, `${file} is missing`);
+  }
+});

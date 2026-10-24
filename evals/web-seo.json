@@ -1,0 +1,32 @@
+{
+  "skill": "web-seo",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my new pages aren't showing up in google",
+      "should_trigger": true,
+      "assertions": [
+        "Checks status codes, robots.txt, noindex, and canonical",
+        "Checks the content and links exist in rendered HTML",
+        "Suggests Search Console URL inspection"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "we are moving domains and changing all urls",
+      "should_trigger": true,
+      "assertions": [
+        "Maps every old URL to the closest new URL with 301 redirects",
+        "Updates canonical, sitemap, and internal links and monitors after launch"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "fix this css grid alignment bug",
+      "should_trigger": false,
+      "assertions": [
+        "The seo skill is not loaded"
+      ]
+    }
+  ]
+}

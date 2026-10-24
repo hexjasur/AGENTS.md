@@ -1,0 +1,33 @@
+{
+  "skill": "renpy-ui-screens",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "how do I make my choice buttons look like dark glass panels without using any png files",
+      "should_trigger": true,
+      "assertions": [
+        "Uses Solid with an alpha color for background and hover_background",
+        "Overrides the choice screen styles rather than editing images",
+        "Mentions checking text contrast"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my custom screen is laggy and the buttons don't work on android",
+      "should_trigger": true,
+      "assertions": [
+        "Warns against slow or side-effecting Python inside screens",
+        "Says not to rely on hover and to use renpy.variant touch or small",
+        "Recommends larger touch targets"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "style my react navbar with tailwind",
+      "should_trigger": false,
+      "assertions": [
+        "The renpy skills are not loaded"
+      ]
+    }
+  ]
+}

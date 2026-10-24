@@ -58,6 +58,15 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `web-accessibility` | Semantic HTML, keyboard support, forms, dialogs, focus, contrast, or audits |
 | `web-security` | Authentication, user input, cookies, CORS, CSP, uploads, secrets, or hardening |
 | `web-seo` | Public routes, crawlability, metadata, canonical URLs, sitemaps, or structured data |
+| `react-typescript` | React 19+ components, hooks, state and effects, strict TypeScript, forms, and Tailwind |
+| `ui-ux-design` | Design tokens, hierarchy, dark and glass UI, motion, states, and UI review |
+| `testing-web` | Vitest, Testing Library, Playwright, MSW, flaky tests, and CI test setup |
+| `github-actions` | Workflows, least-privilege permissions, pinned actions, caching, releases, and hardening |
+| `renpy-visual-novel` | Ren'Py visual novels and AVNs: script structure, define/default, saves, translation, and builds |
+| `renpy-ui-screens` | Ren'Py GUI and screens: gui.rpy, styles, ATL, PNG-free UI, accessibility, and touch |
+| `renpy-main-menu-design` | Modern card-grid Ren'Py main menus: hero art, art tiles, Continue-from-save card, hover motion, and touch layouts |
+| `tauri-best-practices` | Tauri v2 apps: capabilities, CSP, Rust commands and IPC, testing, size, CI, and signing |
+| `tauri-auto-update` | Tauri auto-update: signed updater artifacts, `latest.json`, GitHub Releases pipeline, and in-app update flow |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |
 
 ## Web defaults
@@ -81,5 +90,5 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 
 ## Context
 
-Version: 1.2.1
+Version: 1.4.0
 Founder: [hexjasur](https://github.com/hexjasur)

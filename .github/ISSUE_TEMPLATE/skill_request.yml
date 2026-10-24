@@ -1,0 +1,23 @@
+name: Skill request
+description: Suggest a new skill or an improvement to an existing one
+labels: [skill]
+body:
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: For example "Godot 4 game development" or "Flutter release builds".
+    validations:
+      required: true
+  - type: textarea
+    id: mistakes
+    attributes:
+      label: What do agents get wrong today?
+      description: Concrete mistakes or repeated explanations a skill would prevent.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Official sources
+      description: Links to the documentation the skill should be based on.

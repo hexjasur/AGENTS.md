@@ -1,0 +1,33 @@
+{
+  "skill": "testing-web",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my playwright tests fail randomly on ci",
+      "should_trigger": true,
+      "assertions": [
+        "Looks for fixed sleeps, shared state, and race conditions",
+        "Recommends web-first assertions and traces on retry",
+        "Does not recommend only increasing retries"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "how should I test a react form that calls an api",
+      "should_trigger": true,
+      "assertions": [
+        "Uses Testing Library with role or label queries and user-event",
+        "Mocks the network with MSW instead of the component internals",
+        "Tests the error and success paths"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "design a color palette for a landing page",
+      "should_trigger": false,
+      "assertions": [
+        "The testing skill is not loaded"
+      ]
+    }
+  ]
+}

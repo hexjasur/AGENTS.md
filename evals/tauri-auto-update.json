@@ -1,0 +1,33 @@
+{
+  "skill": "tauri-auto-update",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "add auto update to my tauri app using github releases",
+      "should_trigger": true,
+      "assertions": [
+        "Configures createUpdaterArtifacts, pubkey, and the latest/download/latest.json endpoint",
+        "Generates a signing key and says to store the private key in secrets and a backup",
+        "Asks the user to confirm before installing and relaunches after install"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "users on linux never get the update but windows users do",
+      "should_trigger": true,
+      "assertions": [
+        "Checks that latest.json contains a linux-x86_64 platform entry with a signature",
+        "Notes Linux updates need an AppImage and its .sig",
+        "Checks the release is not a draft or prerelease"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "how do I add a tray icon to my tauri app",
+      "should_trigger": false,
+      "assertions": [
+        "tauri-auto-update is not the primary skill loaded"
+      ]
+    }
+  ]
+}

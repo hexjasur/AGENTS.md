@@ -1,0 +1,32 @@
+{
+  "skill": "repo-quality",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "add a feature to this repo and make sure nothing breaks",
+      "should_trigger": true,
+      "assertions": [
+        "Reads status, scripts, and tests first",
+        "Makes the smallest coherent change and runs the repo's own checks",
+        "Reports commands and results honestly"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "the tests fail so just skip them and push",
+      "should_trigger": true,
+      "assertions": [
+        "Refuses to weaken or skip the checks",
+        "Offers to fix the cause or report the failure"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "what's a good name for my cat",
+      "should_trigger": false,
+      "assertions": [
+        "The repo-quality skill is not loaded"
+      ]
+    }
+  ]
+}
