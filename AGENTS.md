@@ -58,6 +58,8 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `web-accessibility` | Semantic HTML, keyboard support, forms, dialogs, focus, contrast, or audits |
 | `web-security` | Authentication, user input, cookies, CORS, CSP, uploads, secrets, or hardening |
 | `web-seo` | Public routes, crawlability, metadata, canonical URLs, sitemaps, or structured data |
+| `tauri-best-practices` | Tauri v2 apps: capabilities, CSP, Rust commands and IPC, testing, size, CI, and signing |
+| `tauri-auto-update` | Tauri auto-update: signed updater artifacts, `latest.json`, GitHub Releases pipeline, and in-app update flow |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |
 
 ## Web defaults
@@ -81,5 +83,5 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 
 ## Context
 
-Version: 1.2.1
+Version: 1.3.0
 Founder: [hexjasur](https://github.com/hexjasur)

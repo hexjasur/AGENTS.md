@@ -38,6 +38,8 @@ The result is less prompt noise, safer updates, and reusable guidance that can t
 | `web-security` | HTTPS, cookies, CSP, CORS, CSRF, input validation, auth boundaries, uploads, and secrets |
 | `web-seo` | Crawlability, metadata, canonical URLs, internal links, sitemap, robots, and structured data |
 | `repo-quality` | Minimal diffs, package-manager discipline, tests, builds, releases, and code review |
+| `tauri-best-practices` | Tauri v2 capabilities, CSP, Rust commands and IPC, testing, bundle size, CI, and code signing |
+| `tauri-auto-update` | Tauri auto-update with signed artifacts, a `latest.json` manifest, a GitHub Releases pipeline, and a user-confirmed in-app flow |
 | `skill-authoring` | Creating, validating, evaluating, and splitting Agent Skills |
 
 Web guidance is grounded in [Google Chrome Modern Web Guidance](https://codelabs.developers.google.com/codelabs/modern-web-guidance-101), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview), [web.dev](https://web.dev/learn), [MDN](https://developer.mozilla.org/en-US/docs/Web), and [Google Search Central](https://developers.google.com/search/docs/fundamentals/seo-starter-guide).
@@ -67,7 +69,7 @@ Every version release also publishes ready-to-download archives on [GitHub Relea
 - `SHA256SUMS.txt` — checksums for verifying the downloads.
 
 ```sh
-VERSION=1.2.0
+VERSION=1.3.0
 curl -L -o agents-md-bundle.zip \
   "https://github.com/hexjasur/AGENTS.md/releases/download/v${VERSION}/agents-md-bundle-v${VERSION}.zip"
 unzip agents-md-bundle.zip
@@ -130,6 +132,8 @@ my-app/
         ├── web-security/
         ├── web-seo/
         ├── repo-quality/
+        ├── tauri-best-practices/
+        ├── tauri-auto-update/
         └── skill-authoring/
 ```
 
@@ -145,6 +149,8 @@ skills/
 ├── web-security/
 ├── web-seo/
 ├── repo-quality/
+├── tauri-best-practices/
+├── tauri-auto-update/
 └── skill-authoring/
 ```
 
