@@ -1,0 +1,32 @@
+{
+  "skill": "modern-web-guidance",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "can I use the dialog element and popover or do I need a library for my modal",
+      "should_trigger": true,
+      "assertions": [
+        "Recommends native dialog or popover where Baseline supports it",
+        "Asks for or states a browser support target",
+        "Keeps a fallback for unsupported browsers"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "replace this old jquery and polyfill setup with modern code",
+      "should_trigger": true,
+      "assertions": [
+        "Prefers native APIs and progressive enhancement",
+        "Removes polyfills only for features inside the support target"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write a sql migration to add a column",
+      "should_trigger": false,
+      "assertions": [
+        "The web guidance skill is not loaded"
+      ]
+    }
+  ]
+}

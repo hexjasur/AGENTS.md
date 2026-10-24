@@ -1,0 +1,30 @@
+name: Bug report
+description: The installer, a skill, or the docs behave incorrectly
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you run, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. npx -y @hexjasur/agents-md ...
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: "1.4.0"
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Node.js version, and the agent client you use.

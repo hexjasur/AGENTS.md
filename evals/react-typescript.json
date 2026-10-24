@@ -1,0 +1,33 @@
+{
+  "skill": "react-typescript",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my component re-renders forever when I fetch data in useEffect",
+      "should_trigger": true,
+      "assertions": [
+        "Identifies unstable dependencies or setting state without a guard",
+        "Recommends a data library or loader, or adds cleanup and stable dependencies",
+        "Avoids adding useMemo as the first fix"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "convert this class component with defaultProps and forwardRef to react 19 style",
+      "should_trigger": true,
+      "assertions": [
+        "Uses a function component with default parameters",
+        "Passes ref as a prop instead of forwardRef",
+        "Keeps strict types without any"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write a rust function to parse a csv",
+      "should_trigger": false,
+      "assertions": [
+        "The react skill is not loaded"
+      ]
+    }
+  ]
+}

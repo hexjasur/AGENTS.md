@@ -1,0 +1,32 @@
+{
+  "skill": "web-performance",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "lighthouse says 98 but users complain the site is slow",
+      "should_trigger": true,
+      "assertions": [
+        "Distinguishes lab data from field data",
+        "Checks real-user LCP, INP, and CLS",
+        "Changes one thing at a time and measures again"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my lcp image loads late on mobile",
+      "should_trigger": true,
+      "assertions": [
+        "Checks the LCP element, preload or fetch priority, and image size",
+        "Avoids lazy-loading the LCP image"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write unit tests for a pure function",
+      "should_trigger": false,
+      "assertions": [
+        "The performance skill is not loaded"
+      ]
+    }
+  ]
+}

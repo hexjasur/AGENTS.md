@@ -1,0 +1,32 @@
+{
+  "skill": "github-actions",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "review my github actions workflow before I make the repo public",
+      "should_trigger": true,
+      "assertions": [
+        "Checks top-level permissions and elevates per job",
+        "Flags untrusted event data interpolated into run scripts",
+        "Recommends pinning third-party actions to a full commit SHA"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "publish to npm from ci without storing a token",
+      "should_trigger": true,
+      "assertions": [
+        "Uses id-token write with OIDC or npm trusted publishing",
+        "Adds provenance and a protected environment"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "what does git rebase do",
+      "should_trigger": false,
+      "assertions": [
+        "The github-actions skill is not loaded"
+      ]
+    }
+  ]
+}
