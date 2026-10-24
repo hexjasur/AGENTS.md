@@ -1,6 +1,6 @@
 {
   "name": "@hexjasur/agents-md",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Install safe AGENTS.md instructions and modular Agent Skills for coding agents",
   "license": "MIT",
   "type": "module",
@@ -16,6 +16,10 @@
     "seo",
     "security",
     "tauri",
+    "renpy",
+    "visual novel",
+    "react",
+    "github actions",
     "auto update",
     "cli"
   ],
