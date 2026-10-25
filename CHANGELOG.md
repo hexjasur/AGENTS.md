@@ -4,6 +4,14 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.5.0]
+
+### Added
+
+- Agent Skill linter CLI and reusable GitHub Action for metadata, links, review dates, and unsafe-content checks.
+- Weekly source-link and freshness checks, OpenSSF Scorecard reporting, pinned GitHub Actions, and provenance attestations for release archives.
+- OIDC trusted npm publishing when `package.json` version changes on `main`.
+
 ## [1.4.0]
 
 ### Added

@@ -1,0 +1,26 @@
+name: Lint Agent Skills
+description: Check Agent Skill metadata, relative links, review dates, and risky content.
+inputs:
+  path:
+    description: Path to a skill directory or directory containing skill directories.
+    required: false
+    default: skills
+  max-review-age-days:
+    description: Fail when a skill review date is missing or older than this number of days.
+    required: false
+outputs: {}
+runs:
+  using: composite
+  steps:
+    - name: Lint skills
+      shell: bash
+      env:
+        TARGET_PATH: ${{ inputs.path }}
+        MAX_REVIEW_AGE_DAYS: ${{ inputs.max-review-age-days }}
+      run: |
+        set -euo pipefail
+        args=("$TARGET_PATH")
+        if [[ -n "$MAX_REVIEW_AGE_DAYS" ]]; then
+          args+=(--max-review-age-days "$MAX_REVIEW_AGE_DAYS")
+        fi
+        node "$GITHUB_ACTION_PATH/bin/cli.js" lint "${args[@]}"

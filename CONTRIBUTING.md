@@ -27,9 +27,12 @@ Read `skills/skill-authoring/SKILL.md` first; it is the standard every skill her
 2. Write a `description` of at most 1024 characters that says **what** the skill does and **when** to use it, and includes `Use when` or `Use for` plus the words people actually say.
 3. Keep `SKILL.md` under 500 lines: procedure, guardrails, gotchas, and report format. Move long checklists, templates, and sources to `references/` and link each file from `SKILL.md` with a clear load condition.
 4. Base facts on official documentation, link the sources, and avoid claims you did not verify. Do not hard-code fast-moving version numbers unless needed.
+   After checking a skill's content against its sources, update `metadata.last_reviewed` to the review date (`YYYY-MM-DD`). Do not change this date for link checks alone.
 5. Add an eval file at `evals/<name>.json` with at least three prompts, including a casual phrasing, an edge case, and one that should **not** trigger the skill.
 6. Add the skill to the table in `AGENTS.md` and to the README.
 7. Run `npm run verify`. Everything must pass.
+
+The weekly `Skill freshness` workflow checks source links and flags missing or older-than-180-day review dates. To protect `main`, repository administrators should enable a ruleset requiring the CI checks and CODEOWNERS approval; these settings cannot be enforced by files in the repository.
 
 ### Quality bar
 

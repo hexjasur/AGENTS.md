@@ -3,23 +3,27 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import path from 'node:path';
 import { installProject, installMissingSkills, removeInstalledFile, updateProject, getCurrentVersion, listBundledSkills, describeBundledSkills, resolveSkillSelection } from '../lib/core.js';
+import { lintSkills } from '../lib/lint.js';
 
 const HELP = `agents-md v${getCurrentVersion()}
 
 USAGE:
   npx -y @hexjasur/agents-md [init] [directory]
   npx -y @hexjasur/agents-md init [directory] [--yes] [--skills <list>]
+  npx -y @hexjasur/agents-md lint [directory]
   npx -y @hexjasur/agents-md --list-skills
   npx -y @hexjasur/agents-md update [directory] [--force]
   npx -y @hexjasur/agents-md --version
 
 COMMANDS:
   init      Install AGENTS.md in the current or specified directory (default).
+  lint      Validate Agent Skills in the specified directory (default: ./skills).
   update    Update a previously installed AGENTS.md.
 
 OPTIONS:
   --yes     Skip the initial install confirmation; existing files are not overwritten.
   --skills  Comma-separated skills to install (default: all). Example: --skills tauri-auto-update,react-typescript
+  --max-review-age-days  Require a fresh last_reviewed date when used with lint.
   --list-skills  Show the bundled skills and exit.
   --force   Replace a modified AGENTS.md during update.
   --version Show the installed package version.
@@ -64,6 +68,45 @@ async function askAction(questioner) {
 
 async function main() {
   const args = process.argv.slice(2);
+  if (args[0] === 'lint') {
+    const lintArgs = args.slice(1);
+    if (lintArgs.includes('--help') || lintArgs.includes('-h')) {
+      console.log('Usage: agents-md lint [directory] [--max-review-age-days <days>]');
+      return;
+    }
+    let target = 'skills';
+    let maxReviewAgeDays;
+    let targetSet = false;
+    for (let index = 0; index < lintArgs.length; index += 1) {
+      const arg = lintArgs[index];
+      if (arg === '--max-review-age-days') {
+        const value = lintArgs[index + 1];
+        if (value === undefined || !/^\d+$/.test(value)) throw new Error(`${arg} needs a non-negative integer.`);
+        maxReviewAgeDays = Number(value);
+        index += 1;
+      } else if (arg.startsWith('--')) {
+        throw new Error(`Unknown lint option: ${arg}.`);
+      } else if (!targetSet) {
+        target = arg;
+        targetSet = true;
+      } else {
+        throw new Error('Only one lint target path may be specified.');
+      }
+    }
+    const results = await lintSkills(target, { maxReviewAgeDays });
+    let failed = 0;
+    for (const result of results) {
+      if (result.issues.length === 0) console.log(`PASS ${result.skill}`);
+      else {
+        failed += 1;
+        console.error(`FAIL ${result.skill}`);
+        for (const issue of result.issues) console.error(`  - ${issue}`);
+      }
+    }
+    console.log(`Checked ${results.length} skill(s); ${failed} failed.`);
+    if (failed > 0) process.exitCode = 1;
+    return;
+  }
   if (args.includes('--help') || args.includes('-h')) { console.log(HELP); return; }
   if (args.includes('--version') || args.includes('-v')) { console.log(getCurrentVersion()); return; }
   if (args.includes('--list-skills')) {

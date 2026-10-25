@@ -5,6 +5,7 @@ license: MIT
 metadata:
   author: hexjasur
   version: "1.0.0"
+  last_reviewed: "2026-10-25"
 ---
 
 # Ren'Py Main Menu Design (card grid)

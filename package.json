@@ -1,6 +1,6 @@
 {
   "name": "@hexjasur/agents-md",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Install safe AGENTS.md instructions and modular Agent Skills for coding agents",
   "license": "MIT",
   "type": "module",
@@ -39,9 +39,10 @@
   ],
   "scripts": {
     "test": "node --test",
+    "lint": "node bin/cli.js lint",
     "validate:skills": "node --test test/skills.test.js",
     "eval": "node bin/eval.js",
-    "verify": "npm test && npm run validate:skills && npm pack --dry-run"
+    "verify": "npm test && npm run lint -- skills --max-review-age-days 365 && npm run validate:skills && npm pack --dry-run"
   },
   "engines": {
     "node": ">=18"

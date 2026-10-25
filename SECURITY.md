@@ -34,3 +34,11 @@ Each GitHub Release publishes `SHA256SUMS.txt` for the downloadable archives. Ve
 ```sh
 sha256sum -c SHA256SUMS.txt
 ```
+
+GitHub Release archives also have build-provenance attestations. Verify an archive with GitHub CLI:
+
+```sh
+gh attestation verify agents-md-skills-vX.Y.Z.zip --repo hexjasur/AGENTS.md
+```
+
+The npm package is published from GitHub Actions using OIDC trusted publishing and npm provenance; no long-lived npm publish token is stored in GitHub.

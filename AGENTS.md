@@ -90,5 +90,5 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 
 ## Context
 
-Version: 1.4.0
+Version: 1.5.0
 Founder: [hexjasur](https://github.com/hexjasur)

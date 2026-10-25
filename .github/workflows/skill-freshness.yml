@@ -1,0 +1,41 @@
+name: Skill freshness
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - ".github/workflows/skill-freshness.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/**"
+      - ".github/workflows/skill-freshness.yml"
+  schedule:
+    - cron: "23 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check links and review dates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        id: checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Check source and reference links
+        uses: lycheeverse/lychee-action@885c65f3dc543b57c898c8099f4e08c8afd178a2 # v2.6.1
+        with:
+          args: --verbose --no-progress --max-retries 2 "skills/**/*.md"
+          fail: true
+
+      - name: Lint skill metadata and review dates
+        if: always() && steps.checkout.outcome == 'success'
+        run: node bin/cli.js lint skills --max-review-age-days 180

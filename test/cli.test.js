@@ -67,7 +67,17 @@ test('CLI help describes commands and options in English', () => {
   assert.match(result.stdout, /COMMANDS:/);
   assert.match(result.stdout, /OPTIONS:/);
   assert.match(result.stdout, /--yes/);
+  assert.match(result.stdout, /lint/);
   assert.match(result.stdout, /keeps it and installs missing skills by default/);
+});
+
+test('CLI lint command checks bundled skills', () => {
+  const result = spawnSync(process.execPath, [cli, 'lint', 'skills', '--max-review-age-days', '180'], {
+    cwd: root,
+    encoding: 'utf8'
+  });
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Checked \d+ skill\(s\); 0 failed\./);
 });
 
 test('CLI explicitly replacing an existing file records a fresh manifest', async () => withTempDir(async (dir) => {

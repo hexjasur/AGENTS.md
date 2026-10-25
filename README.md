@@ -10,6 +10,7 @@
     <a href="https://www.npmjs.com/package/@hexjasur/agents-md"><img src="https://img.shields.io/npm/v/%40hexjasur%2Fagents-md?logo=npm&logoColor=white&label=npm" alt="npm version" /></a>
     <a href="https://www.npmjs.com/package/@hexjasur/agents-md"><img src="https://img.shields.io/npm/dm/%40hexjasur%2Fagents-md?logo=npm&logoColor=white&label=downloads" alt="npm monthly downloads" /></a>
     <a href="https://github.com/hexjasur/AGENTS.md/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/hexjasur/AGENTS.md/ci.yml?branch=main&label=ci" alt="CI status" /></a>
+    <a href="https://scorecard.dev/viewer/?uri=github.com/hexjasur/AGENTS.md"><img src="https://api.scorecard.dev/projects/github.com/hexjasur/AGENTS.md/badge" alt="OpenSSF Scorecard" /></a>
     <a href="https://github.com/hexjasur/AGENTS.md/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hexjasur/AGENTS.md?color=8b5cf6" alt="MIT license" /></a>
     <a href="https://github.com/hexjasur/AGENTS.md"><img src="https://img.shields.io/github/stars/hexjasur/AGENTS.md?style=flat&logo=github" alt="GitHub stars" /></a>
     <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white" alt="Node.js 18 or newer" /></a>
@@ -186,6 +187,28 @@ Contributions are welcome: sharper skills, new skills for stacks you know well, 
 npm run verify    # tests, skill and eval validation, and a dry-run package listing
 ```
 
+### Lint Agent Skills
+
+Check the bundled skills locally or lint skills in another repository:
+
+```sh
+npx -y @hexjasur/agents-md lint ./skills
+npx -y @hexjasur/agents-md lint ./skills --max-review-age-days 180
+```
+
+The linter checks required metadata, relative links, linked reference files, review-date freshness, symbolic links, known credential formats, and commands that pipe downloaded scripts to a shell. It is also available as a GitHub Action; check out the target repository first:
+
+```yaml
+steps:
+  - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  - uses: hexjasur/AGENTS.md@<full-commit-SHA> # Pin a reviewed 40-character commit SHA.
+    with:
+      path: skills
+      max-review-age-days: 180
+```
+
+For supply-chain security, this repository pins workflow actions to commit SHAs, scans source links and review dates weekly, publishes OpenSSF Scorecard results, and creates provenance attestations for downloadable release files.
+
 ### Run skill evals
 
 The eval runner compares each prompt's response with and without its expected skill, then asks the configured model to grade every assertion in both responses. It uses the OpenAI-compatible Chat Completions API and needs no additional package:
@@ -203,7 +226,25 @@ In PowerShell, set these with `$env:EVAL_API_KEY="your-api-key"`, `$env:EVAL_MOD
 
 `EVAL_BASE_URL` is the API base URL (not the `/chat/completions` path). Run `npm run eval` without filters to evaluate every skill. The report includes baseline and skill assertion pass rates and their percentage-point difference. `--output` writes the full responses and per-assertion grades as JSON. The eval's `should_trigger` field controls whether its skill is included in the skill-enabled run; it does not measure a client's automatic skill-triggering behavior. Results vary by model, so compare runs using the same model and configuration; an unqualified README score badge would be misleading.
 
-To publish a release, a maintainer bumps `package.json` to a new semantic version and pushes to `main`. CI verifies the repository, builds the archives, calculates checksums, and publishes the GitHub Release. Do not create the tag manually.
+To publish a release, a maintainer bumps `package.json` to a new semantic version and pushes to `main`. CI verifies the repository, builds and attests the downloadable archives, calculates checksums, and creates the GitHub Release. A package version change also publishes to npm with OIDC trusted publishing and provenance; no npm token or manual 2FA is needed in CI.
+
+Before the first automated npm publish, configure a trusted publisher in the `@hexjasur/agents-md` package settings on npmjs.com:
+
+- Provider: GitHub Actions
+- Organization/user: `hexjasur`
+- Repository: `AGENTS.md`
+- Workflow filename: `release.yml`
+- Environment: leave blank
+- Allow direct `npm publish`
+
+To verify a downloaded release artifact's attestation with GitHub CLI:
+
+```sh
+gh attestation verify agents-md-skills-vX.Y.Z.zip --repo hexjasur/AGENTS.md
+sha256sum -c SHA256SUMS.txt
+```
+
+Repository administrators must separately enable branch protection or a ruleset for `main`; require the `ci` checks for Node.js 18, 20, and 22 plus a CODEOWNERS review. GitHub does not allow a checked-in file to enforce these repository settings.
 
 ## Official references
 
