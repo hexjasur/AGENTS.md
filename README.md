@@ -186,6 +186,23 @@ Contributions are welcome: sharper skills, new skills for stacks you know well, 
 npm run verify    # tests, skill and eval validation, and a dry-run package listing
 ```
 
+### Run skill evals
+
+The eval runner compares each prompt's response with and without its expected skill, then asks the configured model to grade every assertion in both responses. It uses the OpenAI-compatible Chat Completions API and needs no additional package:
+
+```sh
+export EVAL_API_KEY="your-api-key"
+export EVAL_MODEL="your-model"
+# Optional; defaults to https://api.openai.com/v1
+export EVAL_BASE_URL="https://api.openai.com/v1"
+npm run eval -- --skill web-seo
+npm run eval -- --skill web-seo --case casual --output eval-results.json
+```
+
+In PowerShell, set these with `$env:EVAL_API_KEY="your-api-key"`, `$env:EVAL_MODEL="your-model"`, and optionally `$env:EVAL_BASE_URL="https://api.openai.com/v1"` before running the same npm commands.
+
+`EVAL_BASE_URL` is the API base URL (not the `/chat/completions` path). Run `npm run eval` without filters to evaluate every skill. The report includes baseline and skill assertion pass rates and their percentage-point difference. `--output` writes the full responses and per-assertion grades as JSON. The eval's `should_trigger` field controls whether its skill is included in the skill-enabled run; it does not measure a client's automatic skill-triggering behavior. Results vary by model, so compare runs using the same model and configuration; an unqualified README score badge would be misleading.
+
 To publish a release, a maintainer bumps `package.json` to a new semantic version and pushes to `main`. CI verifies the repository, builds the archives, calculates checksums, and publishes the GitHub Release. Do not create the tag manually.
 
 ## Official references

@@ -32,6 +32,7 @@
     "bin/",
     "lib/",
     "skills/",
+    "evals/",
     "assets/",
     "install-agents.sh",
     "README.md"
@@ -39,6 +40,7 @@
   "scripts": {
     "test": "node --test",
     "validate:skills": "node --test test/skills.test.js",
+    "eval": "node bin/eval.js",
     "verify": "npm test && npm run validate:skills && npm pack --dry-run"
   },
   "engines": {
