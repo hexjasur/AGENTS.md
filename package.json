@@ -42,7 +42,8 @@
     "lint": "node bin/cli.js lint",
     "validate:skills": "node --test test/skills.test.js",
     "eval": "node bin/eval.js",
-    "verify": "npm test && npm run lint -- skills --max-review-age-days 365 && npm run validate:skills && npm pack --dry-run"
+    "verify": "node bin/sync-skill-index.js --check && npm test && npm run lint -- skills --max-review-age-days 365 && npm run validate:skills && npm pack --dry-run",
+    "sync:skills": "node bin/sync-skill-index.js"
   },
   "engines": {
     "node": ">=18"

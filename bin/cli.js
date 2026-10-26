@@ -3,13 +3,14 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 import path from 'node:path';
 import { installProject, installMissingSkills, removeInstalledFile, updateProject, getCurrentVersion, listBundledSkills, describeBundledSkills, resolveSkillSelection } from '../lib/core.js';
+import { resolveAgentSelection } from '../lib/agent-adapters.js';
 import { lintSkills } from '../lib/lint.js';
 
 const HELP = `agents-md v${getCurrentVersion()}
 
 USAGE:
   npx -y @hexjasur/agents-md [init] [directory]
-  npx -y @hexjasur/agents-md init [directory] [--yes] [--skills <list>]
+  npx -y @hexjasur/agents-md init [directory] [--yes] [--skills <list>] [--agents <list>]
   npx -y @hexjasur/agents-md lint [directory]
   npx -y @hexjasur/agents-md --list-skills
   npx -y @hexjasur/agents-md update [directory] [--force]
@@ -23,13 +24,14 @@ COMMANDS:
 OPTIONS:
   --yes     Skip the initial install confirmation; existing files are not overwritten.
   --skills  Comma-separated skills to install (default: all). Example: --skills tauri-auto-update,react-typescript
+  --agents  Optional agent bridges: claude,cursor,copilot (or all); existing files are kept.
   --max-review-age-days  Require a fresh last_reviewed date when used with lint.
   --list-skills  Show the bundled skills and exit.
   --force   Replace a modified AGENTS.md during update.
   --version Show the installed package version.
   --help    Show this help message.
 
-Install includes AGENTS.md and the selected (default: all) bundled skills in .agent/skills.
+Install includes AGENTS.md, the selected (default: all) bundled skills in .agent/skills, and optional client bridges.
 Update adds missing bundled skills too; pass --skills to limit which ones.
 If AGENTS.md already exists, init keeps it and installs missing skills by default.
 --yes skips prompts and never replaces existing files. --force is only available for update.`;
@@ -47,12 +49,13 @@ function createQuestioner() {
   };
 }
 
-async function askInstallConfirmation(questioner, projectDir, selection) {
+async function askInstallConfirmation(questioner, projectDir, selection, agentSelection) {
   const skills = selection ?? (await listBundledSkills());
   console.log('@hexjasur/agents-md includes project-wide instructions and modular Agent Skills.');
   console.log(`${selection ? 'Selected' : 'Included'} skills: ${skills.join(', ')}`);
   console.log(`Target: ${path.resolve(projectDir)}`);
-  console.log('Install targets: AGENTS.md and .agent/skills/<skill>/');
+  console.log(`Install targets: AGENTS.md and .agent/skills/<skill>/`);
+  if (agentSelection.length > 0) console.log(`Agent bridges: ${agentSelection.join(', ')}`);
   console.log('The installer manifest (.agent/hexjasurs.agent.scheme.json) is written only when it installs AGENTS.md.');
   const answer = (await questioner.ask('Continue with installation? [y/N]: ')).trim().toLowerCase();
   return answer === 'y' || answer === 'yes';
@@ -119,6 +122,7 @@ async function main() {
   let force = false;
   let yes = false;
   let skillNames;
+  let agentNames;
   const positional = [];
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
@@ -130,30 +134,37 @@ async function main() {
       skillNames = value.split(',');
       index += 1;
     } else if (arg.startsWith('--skills=')) skillNames = arg.slice('--skills='.length).split(',');
+    else if (arg === '--agents') {
+      const value = args[index + 1];
+      if (value === undefined || value.startsWith('--')) throw new Error('--agents needs a comma-separated list of agent names, or "all".');
+      agentNames = value.split(',');
+      index += 1;
+    } else if (arg.startsWith('--agents=')) agentNames = arg.slice('--agents='.length).split(',');
     else if (arg.startsWith('--')) throw new Error(`Unknown option: ${arg}. Run with --help for usage.`);
     else positional.push(arg);
   }
   const selection = await resolveSkillSelection(skillNames);
+  const agentSelection = resolveAgentSelection(agentNames);
   const command = positional[0] === 'update' ? 'update' : 'init';
   const projectDir = positional[0] === 'update' || positional[0] === 'init' ? positional[1] ?? '.' : positional[0] ?? '.';
   if (positional.length > (positional[0] === 'update' || positional[0] === 'init' ? 2 : 1)) throw new Error('Too many arguments. Run with --help for usage.');
   let result;
   if (command === 'update') {
-    result = await updateProject(projectDir, { force, skills: selection });
+    result = await updateProject(projectDir, { force, skills: selection, agents: agentSelection });
   } else {
     const questioner = createQuestioner();
     try {
-      if (!yes && !(await askInstallConfirmation(questioner, projectDir, selection))) {
+      if (!yes && !(await askInstallConfirmation(questioner, projectDir, selection, agentSelection))) {
         console.log('Cancelled; no files were installed.');
         return;
       }
-      result = await installProject(projectDir, { skills: selection });
+      result = await installProject(projectDir, { skills: selection, agents: agentSelection });
       if (result.status === 'exists') {
         const action = yes ? 'keep' : await askAction(questioner);
         if (action === 'cancel') { console.log('Cancelled; the existing file was not changed.'); return; }
         if (action === 'delete') result = await removeInstalledFile(projectDir, { force: true });
-        if (action === 'replace') result = await installProject(projectDir, { replaceExisting: true, force: true, skills: selection });
-        if (action === 'keep') result = await installMissingSkills(projectDir, { skills: selection });
+        if (action === 'replace') result = await installProject(projectDir, { replaceExisting: true, force: true, skills: selection, agents: agentSelection });
+        if (action === 'keep') result = await installMissingSkills(projectDir, { skills: selection, agents: agentSelection });
       }
     } finally {
       questioner.close();
@@ -163,6 +174,10 @@ async function main() {
   if (result.skills) {
     if (result.skills.installed.length) console.log(`Installed skills: ${result.skills.installed.join(', ')}`);
     if (result.skills.skipped.length) console.log(`Kept existing skills: ${result.skills.skipped.join(', ')}`);
+  }
+  if (result.agents) {
+    if (result.agents.installed.length) console.log(`Installed agent bridges: ${result.agents.installed.join(', ')}`);
+    if (result.agents.skipped.length) console.log(`Kept existing agent bridge files: ${result.agents.skipped.join(', ')}`);
   }
 }
 

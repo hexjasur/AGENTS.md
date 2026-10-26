@@ -28,6 +28,16 @@
       "assertions": [
         "The react skill is not loaded"
       ]
+    },
+    {
+      "id": "url-state",
+      "prompt": "Add pagination and filters to a React results page. They must survive refresh and be restored by browser back/forward.",
+      "should_trigger": true,
+      "assertions": [
+        "Uses the existing router and stores shareable page/filter state in the URL",
+        "Handles direct links, refresh, and browser back/forward without duplicated stale local state",
+        "Validates query values and keeps ephemeral UI state local"
+      ]
     }
   ]
 }

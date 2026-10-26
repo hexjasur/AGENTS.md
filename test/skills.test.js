@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const skillsRoot = path.join(root, 'skills');
@@ -109,10 +110,31 @@ test('skills and AGENTS.md carry no secrets or machine-specific paths', async ()
   }
 });
 
-test('AGENTS.md version matches package.json', async () => {
+test('README release download version matches package.json', async () => {
   const pkg = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
+  const readme = await readFile(path.join(root, 'README.md'), 'utf8');
+  const version = /^VERSION=(.+)$/m.exec(readme)?.[1];
+  assert.equal(version, pkg.version, 'README download example must target the current package version');
+});
+
+test('skill catalogs are generated and stay synchronized across AGENTS.md and README', () => {
+  const result = spawnSync(process.execPath, [path.join(root, 'bin', 'sync-skill-index.js'), '--check'], { cwd: root, encoding: 'utf8' });
+  assert.equal(result.status, 0, `${result.stdout}${result.stderr}`);
+});
+
+test('AGENTS.md omits duplicated version and founder metadata', async () => {
   const agents = await readFile(path.join(root, 'AGENTS.md'), 'utf8');
-  assert.match(agents, new RegExp(`^Version: ${pkg.version.replace(/\./g, '\\.')}$`, 'm'));
+  assert.doesNotMatch(agents, /^Version:/m);
+  assert.doesNotMatch(agents, /^Founder:/m);
+});
+
+test('.gitignore excludes dotenv files without hiding similarly named source files', () => {
+  const isIgnored = (file) => spawnSync('git', ['check-ignore', '-q', '--no-index', file], { cwd: root }).status === 0;
+  assert.equal(isIgnored('.env'), true);
+  assert.equal(isIgnored('.env.local'), true);
+  assert.equal(isIgnored('.env.example'), false);
+  assert.equal(isIgnored('env.d.ts'), false);
+  assert.equal(isIgnored('environments/config.ts'), false);
 });
 
 test('every skill has an eval file with positive, edge, and negative prompts', async () => {

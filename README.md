@@ -29,11 +29,11 @@ It shows what it will install, asks `Continue with installation? [y/N]`, and on 
 
 ```text
 AGENTS.md                              the project-wide contract for your agent
-.agent/skills/                         the skills you chose (default: all 16)
+.agent/skills/                         the skills you chose (default: all bundled skills)
 .agent/hexjasurs.agent.scheme.json     version and SHA-256 manifest for safe updates
 ```
 
-Works with any agent client that reads `AGENTS.md` and Agent Skills. Existing files are never overwritten without an explicit choice.
+Works with agent clients that read `AGENTS.md` and Agent Skills. Use `--agents claude,cursor,copilot` to add optional Claude Code, Cursor, or GitHub Copilot instruction bridges. Existing files are never overwritten.
 
 ## Who is this for?
 
@@ -52,26 +52,30 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 
 ## What is included
 
-| Area | Skill | Best for |
-| --- | --- | --- |
-| Frontend | `react-typescript` | React 19+ components, hooks, state and effects, strict TypeScript, forms, Tailwind |
-| Frontend | `ui-ux-design` | Design tokens, hierarchy, dark and glass UI, motion, states, UI review |
-| Frontend | `testing-web` | Vitest, Testing Library, Playwright, MSW, flaky tests, CI |
-| Web platform | `modern-web-guidance` | Baseline-aware architecture, native APIs, progressive enhancement |
-| Web platform | `web-performance` | Core Web Vitals, Lighthouse, loading, images, fonts, layout stability |
-| Web platform | `web-accessibility` | WCAG 2.2, semantic HTML, keyboard, focus, forms, dialogs, contrast |
-| Web platform | `web-security` | HTTPS, cookies, CSP, CORS, CSRF, validation, uploads, secrets |
-| Web platform | `web-seo` | Crawlability, metadata, canonical URLs, sitemaps, structured data |
-| Tauri | `tauri-best-practices` | Capabilities, CSP, Rust commands and IPC, testing, bundle size, CI, signing |
-| Tauri | `tauri-auto-update` | Signed updates, `latest.json`, release pipeline, in-app update flow |
-| Engineering | `repo-quality` | Minimal diffs, tests, builds, releases, code review |
-| Engineering | `github-actions` | Least-privilege workflows, pinned actions, caching, releases, hardening |
-| Engineering | `skill-authoring` | Writing, evaluating, and splitting Agent Skills and `AGENTS.md` |
-| Ren'Py | `renpy-visual-novel` | Script structure, state, saves and updates, translation, builds, itch.io |
-| Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
-| Ren'Py | `renpy-main-menu-design` | Modern card-grid main menus: hero art, art tiles, Continue-from-save card |
+<!-- SKILLS:BEGIN -->
+| Skill | Description |
+| --- | --- |
+| `error-handling-observability` | Design reliable error handling, structured logging, metrics, tracing, alerting, and incident diagnostics without leaking sensitive data. Use when adding or reviewing error paths, logging, telemetry, retries, health checks, or production debugging. |
+| `git-workflow` | Plan and execute safe Git branching, commits, merges, rebases, cherry-picks, conflict resolution, and history repair. Use when changing branches, editing or dropping commits, rebasing, cherry-picking, reverting, cleaning a worktree, or pushing changes. |
+| `github-actions` | Write, secure, speed up, and debug GitHub Actions workflows with least-privilege permissions, SHA-pinned actions, injection-safe scripts, OIDC instead of long-lived secrets, caching, matrices, concurrency, reusable workflows, release automation, and Dependabot for actions. Use when creating or reviewing CI/CD workflows, fixing slow, flaky, or failing runs, hardening a pipeline against supply-chain attacks, or automating releases and package publishing. |
+| `modern-web-guidance` | Plan, build, review, or modernize web apps and pages with Baseline-aware native platform features, progressive enhancement, and measured performance, accessibility, security, and SEO outcomes. Use when adding web features, replacing legacy UI code or polyfills, choosing between a native API and a library, reviewing a web architecture, or before shipping a public page. |
+| `react-typescript` | Write and review modern React 19+ with strict TypeScript, including component and hook design, state placement, derived state, effects, data fetching, forms and Actions, Suspense and error boundaries, performance, Tailwind styling, and accessible markup. Use when building or refactoring React components, hooks, forms, or state, fixing re-render, effect, or type errors, migrating older React code, or reviewing a React and TypeScript pull request. |
+| `renpy-main-menu-design` | Design and build a modern card-grid main menu for Ren'Py games that does not look like stock Ren'Py, with full-bleed hero art, a dark scrim, a centered logo, pill-shaped info and social bars, large art tiles for Play, Continue, Options, and Extras, a Continue card that shows the latest save, hover motion, and touch and controller support. Use when someone wants a more unique, premium, cinematic, or modern Ren'Py main menu, asks for main menu design ideas, or wants to replace the plain text-list menu with a grid, cards, or tiles. |
+| `renpy-ui-screens` | Design and implement Ren'Py GUI and screens with the GUI workflow, gui.rpy variables, screen language, styles, ATL transforms, PNG-free solid-color and glass-style interfaces, accessible text and navigation, and mobile and gamepad support. Use when customizing the main menu, say window, choice menu, preferences, save/load, notifications, HUDs, inventories, or any custom screen in a Ren'Py visual novel or game. |
+| `renpy-visual-novel` | Plan, write, structure, test, translate, and ship Ren'Py visual novels and adult or episodic VNs (AVNs) with clean script organization, correct define/default/persistent usage, save compatibility across updates, lint-clean scripts, translations, and PC, Android, web, and itch.io builds. Use when starting or reviewing a Ren'Py project, writing labels, menus and flags, fixing save or rollback bugs, running Lint, adding translations, or preparing a release or update. |
+| `repo-quality` | Safely modify and ship a software repository with minimal diffs, package-manager discipline, tests, lint, typecheck, build, supply-chain hygiene, and reviewable commits and pull requests. Use for feature work, bug fixes, refactors, dependency changes, CI or release changes, and code review. |
+| `skill-authoring` | Create, review, validate, evaluate, and improve Agent Skills (SKILL.md) and AGENTS.md files following the agentskills.io specification. Use when writing or splitting a skill, tightening a description so it triggers correctly, designing references or scripts, adding evals, or auditing an AGENTS.md for size, clarity, and safety. |
+| `tauri-auto-update` | Implement, review, and debug the hexjasur Tauri v2 auto-update workflow, which uses signed updater artifacts, a GitHub Release latest.json manifest, a tauri-action release pipeline, synchronized versions, and a user-confirmed in-app update flow. Use when adding auto-update to a Tauri app, changing the release workflow, fixing "no update found", signature, or missing-platform errors, or shipping a new version. |
+| `tauri-best-practices` | Build, secure, test, shrink, and ship Tauri v2 apps with least-privilege capabilities, a strict CSP, well-designed Rust commands and IPC, sound project structure, release-profile optimization, mock-runtime tests, cross-platform webview checks, and CI builds with code signing. Use when starting or reviewing a Tauri project, writing Rust commands or events, configuring capabilities or CSP, reducing bundle size, setting up CI, or debugging IPC and platform differences. |
+| `testing-web` | Design, write, and stabilize automated tests for web and Tauri frontends with Vitest, Testing Library, Playwright, and Mock Service Worker, including what to test, accessible queries, network mocking, end-to-end flows, visual and accessibility checks, flaky-test fixes, and CI setup. Use when adding or reviewing tests, fixing flaky or slow tests, choosing between unit, component, and end-to-end tests, or setting up test tooling and CI. |
+| `ui-ux-design` | Design and review polished, accessible user interfaces with design tokens, type and spacing scales, color roles and contrast, warm dark themes, glass and blur surfaces, motion, responsive layouts, and complete empty, loading, and error states, with Tailwind-friendly tokens. Use when building or restyling screens, creating or extending a design system, choosing colors or typography, adding animation or glassmorphism, or reviewing UI quality for web, Tauri, or app interfaces. |
+| `web-accessibility` | Build and audit accessible web pages and components against WCAG 2.2 AA with semantic HTML, keyboard support, focus management, form errors, contrast, and screen-reader-friendly states. Use for UI work, dialogs, menus, navigation, forms, custom widgets, and accessibility audits or bug reports. |
+| `web-performance` | Audit and improve web loading, responsiveness, and layout stability using production measurements, Core Web Vitals (LCP, INP, CLS), and Lighthouse. Use when pages feel slow, Lighthouse or field data flags a regression, or when optimizing bundles, images, fonts, third-party scripts, hydration, or caching. |
+| `web-security` | Threat-model, review, and harden web applications, APIs, forms, sessions, cookies, browser security headers, uploads, and third-party code. Use when handling authentication, authorization, user input or rendering, secrets, CORS or CSP, file uploads, redirects, dependencies, or a pre-release security review. |
+| `web-seo` | Improve discoverability of public web pages with crawlable architecture, unique titles and descriptions, canonical URLs, internal links, structured data, sitemaps, robots rules, and social previews. Use for public routes, SEO audits, indexing or "not showing in Google" problems, migrations and redirects, JavaScript-rendered sites, and share-card previews. |
+<!-- SKILLS:END -->
 
-Every skill has a precise trigger description, a procedure, hard guardrails, real-world gotchas, a report format, and links to official sources. Each one is covered by eval prompts in [`evals/`](./evals).
+Every skill has a focused trigger description and procedure, with guardrails and eval prompts in [`evals/`](./evals). Additional checklists and sources are linked from the skill when useful.
 
 ## Quick start
 
@@ -82,6 +86,7 @@ npx -y @hexjasur/agents-md                       # interactive install into the 
 npx -y @hexjasur/agents-md init ./my-app         # install into a specific folder
 npx -y @hexjasur/agents-md --yes                 # skip the confirmation (never overwrites files)
 npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design
+npx -y @hexjasur/agents-md --agents claude,cursor,copilot # optional client-specific bridges
 npx -y @hexjasur/agents-md update ./my-app       # refresh AGENTS.md and add missing skills
 npx -y @hexjasur/agents-md --list-skills
 npx -y @hexjasur/agents-md --help
@@ -98,7 +103,7 @@ Every release publishes ready-to-download archives on [GitHub Releases](https://
 - `SHA256SUMS.txt`: checksums for verifying the downloads.
 
 ```sh
-VERSION=1.4.0
+VERSION=1.5.0
 curl -L -o agents-md-bundle.zip \
   "https://github.com/hexjasur/AGENTS.md/releases/download/v${VERSION}/agents-md-bundle-v${VERSION}.zip"
 unzip agents-md-bundle.zip
@@ -169,6 +174,8 @@ my-app/
 ```
 
 If `AGENTS.md` already exists, the default is to keep it and install missing skills. `--yes` keeps it without prompting. The manifest tracks `AGENTS.md`; when you keep a user-owned `AGENTS.md`, no manifest is created for it.
+
+Add optional client-specific bridges with `--agents claude,cursor,copilot` or `--agents all`. The installer creates `CLAUDE.md` with an `@AGENTS.md` import, `.cursor/rules/agents-md.mdc` with an always-applied `@AGENTS.md` rule, and `.github/copilot-instructions.md` pointing to the canonical root instructions. Existing bridge files are preserved. Use `--agents` on `init` or `update`; adapter names are validated before installation.
 
 ## Safety model
 

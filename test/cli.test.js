@@ -67,6 +67,7 @@ test('CLI help describes commands and options in English', () => {
   assert.match(result.stdout, /COMMANDS:/);
   assert.match(result.stdout, /OPTIONS:/);
   assert.match(result.stdout, /--yes/);
+  assert.match(result.stdout, /--agents/);
   assert.match(result.stdout, /lint/);
   assert.match(result.stdout, /keeps it and installs missing skills by default/);
 });
@@ -82,10 +83,11 @@ test('CLI lint command checks bundled skills', () => {
 
 test('CLI explicitly replacing an existing file records a fresh manifest', async () => withTempDir(async (dir) => {
   await writeFile(path.join(dir, 'AGENTS.md'), 'custom rules');
-  const result = spawnSync(process.execPath, [cli, 'init', dir], { input: 'y\nr\n', encoding: 'utf8' });
+  const result = spawnSync(process.execPath, [cli, 'init', dir, '--agents', 'claude'], { input: 'y\nr\n', encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /replaced/);
   assert.match(await readFile(path.join(dir, 'AGENTS.md'), 'utf8'), /^# AGENTS\.md/m);
+  assert.equal(await readFile(path.join(dir, 'CLAUDE.md'), 'utf8'), '@AGENTS.md\n');
 }));
 
 test('install refuses scheme directory symlinks', async () => withTempDir(async (dir) => {
@@ -141,4 +143,51 @@ test('CLI rejects path-like skill names', async () => withTempDir(async (dir) =>
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Unknown skill/);
   assert.deepEqual(await readdir(dir), []);
+}));
+
+test('CLI --agents installs Claude, Cursor, and Copilot bridges from canonical AGENTS.md', async () => withTempDir(async (dir) => {
+  const result = spawnSync(process.execPath, [cli, 'init', dir, '--yes', '--skills', 'repo-quality', '--agents', 'all'], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(await readFile(path.join(dir, 'CLAUDE.md'), 'utf8'), '@AGENTS.md\n');
+  assert.match(await readFile(path.join(dir, '.cursor', 'rules', 'agents-md.mdc'), 'utf8'), /alwaysApply: true[\s\S]*@AGENTS\.md/);
+  assert.match(await readFile(path.join(dir, '.github', 'copilot-instructions.md'), 'utf8'), /canonical project instructions.*AGENTS\.md/s);
+  assert.match(result.stdout, /Installed agent bridges: claude, cursor, copilot/);
+}));
+
+test('CLI preserves existing agent bridge files', async () => withTempDir(async (dir) => {
+  const { mkdir } = await import('node:fs/promises');
+  const target = path.join(dir, '.cursor', 'rules', 'agents-md.mdc');
+  await mkdir(path.dirname(target), { recursive: true });
+  await writeFile(target, 'user-authored cursor rule');
+  const result = spawnSync(process.execPath, [cli, 'init', dir, '--yes', '--skills', 'repo-quality', '--agents', 'cursor'], { encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(await readFile(target, 'utf8'), 'user-authored cursor rule');
+  assert.match(result.stdout, /Kept existing agent bridge files: cursor/);
+}));
+
+test('CLI update can add a missing agent bridge to an existing installation', async () => withTempDir(async (dir) => {
+  const init = spawnSync(process.execPath, [cli, 'init', dir, '--yes', '--skills', 'repo-quality'], { encoding: 'utf8' });
+  assert.equal(init.status, 0, init.stderr);
+  const update = spawnSync(process.execPath, [cli, 'update', dir, '--agents', 'claude'], { encoding: 'utf8' });
+  assert.equal(update.status, 0, update.stderr);
+  assert.equal(await readFile(path.join(dir, 'CLAUDE.md'), 'utf8'), '@AGENTS.md\n');
+  assert.match(update.stdout, /Installed agent bridges: claude/);
+}));
+
+test('CLI rejects unsupported agent adapters before writing files', async () => withTempDir(async (dir) => {
+  const result = spawnSync(process.execPath, [cli, 'init', dir, '--yes', '--agents', '../outside'], { encoding: 'utf8' });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Unknown agent adapter/);
+  assert.deepEqual(await readdir(dir), []);
+}));
+
+test('CLI refuses agent adapter directories that are symbolic links', async () => withTempDir(async (dir) => {
+  const outside = await mkdtemp(path.join(os.tmpdir(), 'agents-md-adapter-outside-'));
+  try {
+    await symlink(outside, path.join(dir, '.github'));
+    const result = spawnSync(process.execPath, [cli, 'init', dir, '--yes', '--skills', 'repo-quality', '--agents', 'copilot'], { encoding: 'utf8' });
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr, /agent adapter directory must not be a symbolic link/);
+    assert.deepEqual(await readdir(outside), []);
+  } finally { await rm(outside, { recursive: true, force: true }); }
 }));

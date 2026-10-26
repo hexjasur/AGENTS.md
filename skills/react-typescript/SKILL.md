@@ -30,7 +30,8 @@ Prefer simple, pure components and let the type system and the framework do the 
 4. Components are named function components with typed props. Compute derived values during render. Do not copy props into state.
 5. An effect is for subscriptions, timers, DOM APIs, and network sync. Always return a cleanup, list every dependency, and do not use effects to transform data or react to clicks.
 6. Cover loading, error, empty, and success states. Use semantic elements, labels, and keyboard support (see `web-accessibility`). Wrap risky subtrees in error boundaries and slow ones in Suspense.
-7. Run `tsc --noEmit`, the linter, and tests. Measure with the React Profiler or browser tools before adding `memo`, `useMemo`, or `useCallback`; with the React Compiler enabled, manual memoization is rarely needed.
+7. Keep shareable route state in the URL: pagination, filters, sorting, selected entities, and open media should survive refresh, direct links, and browser back/forward. Use the existing router APIs and validate query values; reserve local state for ephemeral UI such as an unsubmitted draft or hover.
+8. Run `tsc --noEmit`, the linter, and tests. Measure with the React Profiler or browser tools before adding `memo`, `useMemo`, or `useCallback`; with the React Compiler enabled, manual memoization is rarely needed.
 
 ## Guardrails
 
@@ -54,6 +55,7 @@ Prefer simple, pure components and let the type system and the framework do the 
 - Use `useTransition` or `useDeferredValue` to keep input responsive during expensive updates; use virtualization for long lists.
 - Context re-renders every consumer when its value changes. Split contexts by update frequency and memoize provider values.
 - `fetch().json()` and `JSON.parse` return untyped data; validate before trusting it.
+- Component-only pagination/filter state is lost on refresh and cannot be shared. Encode navigable state in path or query parameters and respond to `popstate` through the router, not a hand-rolled effect.
 - Event types are specific: `React.ChangeEvent<HTMLInputElement>`, `React.FormEvent<HTMLFormElement>`. Use `React.ReactNode` for children.
 - In a Tauri app, do not assume server rendering or a browser-only API is always present; guard desktop-only calls (see `tauri-best-practices`).
 

@@ -3,6 +3,16 @@
 All notable changes are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Added
+- `error-handling-observability` and `git-workflow` skills, with focused eval prompts and operational references.
+- Optional Claude Code, Cursor, and GitHub Copilot instruction bridges through `--agents`.
+- Generated skill catalogs for `AGENTS.md` and README, checked by the verification script.
+### Changed
+- React guidance and project defaults now require URL synchronization for shareable route state, pagination, and browser navigation.
+- Narrowed `.gitignore` environment patterns so files such as `env.d.ts` are not hidden.
+### Fixed
+- Corrected the README release download example and added a version-sync regression test.
+
 
 ## [1.5.0]
 

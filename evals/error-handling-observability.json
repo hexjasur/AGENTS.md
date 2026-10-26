@@ -1,0 +1,33 @@
+{
+  "skill": "error-handling-observability",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "Add request logging and metrics to this API. Make sure useful context is recorded without leaking customer data.",
+      "should_trigger": true,
+      "assertions": [
+        "Inspects and reuses the existing telemetry stack before adding dependencies",
+        "Uses structured context and explicitly redacts credentials and personal data",
+        "Adds tests for privacy/redaction and reports operational follow-up"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "The payment request timed out, so just retry it five times and log the full request body for debugging.",
+      "should_trigger": true,
+      "assertions": [
+        "Rejects logging an unredacted sensitive request body",
+        "Explains that timeout outcome can be ambiguous and requires idempotency before retries",
+        "Bounds retries and honors deadlines/cancellation"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "Change the button color from blue to green in this static page.",
+      "should_trigger": false,
+      "assertions": [
+        "The observability skill is not loaded for a simple visual-only change"
+      ]
+    }
+  ]
+}
