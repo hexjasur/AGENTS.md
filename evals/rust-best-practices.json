@@ -1,0 +1,33 @@
+{
+  "skill": "rust-best-practices",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "my rust code says value borrowed here after move and i keep adding clone, how do i fix it properly",
+      "should_trigger": true,
+      "assertions": [
+        "Explains the ownership cause instead of adding clone blindly",
+        "Suggests borrowing, restructuring data, or passing fields separately",
+        "Runs or recommends cargo clippy and tests after the change"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my tauri command freezes the app when it reads a big folder and sometimes panics on bad input",
+      "should_trigger": true,
+      "assertions": [
+        "Moves blocking work to spawn_blocking or an async API",
+        "Replaces unwrap with Result and a serializable error type",
+        "Validates frontend arguments and does not leak internal paths"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "what is the difference between let and const in javascript",
+      "should_trigger": false,
+      "assertions": [
+        "The rust-best-practices skill is not loaded"
+      ]
+    }
+  ]
+}
