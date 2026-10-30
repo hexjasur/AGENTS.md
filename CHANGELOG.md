@@ -4,6 +4,10 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+### Added
+
+- Skill: `llm-agent-integration` for LLM chat and coding-agent features: key handling, streaming, tool schemas, agent loop limits, prompt injection defense, and confirmation for risky actions.
+
 ## [1.5.0]
 
 ### Added

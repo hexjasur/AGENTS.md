@@ -67,6 +67,7 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 | Engineering | `repo-quality` | Minimal diffs, tests, builds, releases, code review |
 | Engineering | `github-actions` | Least-privilege workflows, pinned actions, caching, releases, hardening |
 | Engineering | `skill-authoring` | Writing, evaluating, and splitting Agent Skills and `AGENTS.md` |
+| Engineering | `llm-agent-integration` | OpenRouter and LLM chat, streaming, tool calling, agent loops, prompt injection, safe file access, cost limits |
 | Ren'Py | `renpy-visual-novel` | Script structure, state, saves and updates, translation, builds, itch.io |
 | Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
 | Ren'Py | `renpy-main-menu-design` | Modern card-grid main menus: hero art, art tiles, Continue-from-save card |

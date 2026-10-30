@@ -67,6 +67,7 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `renpy-main-menu-design` | Modern card-grid Ren'Py main menus: hero art, art tiles, Continue-from-save card, hover motion, and touch layouts |
 | `tauri-best-practices` | Tauri v2 apps: capabilities, CSP, Rust commands and IPC, testing, size, CI, and signing |
 | `tauri-auto-update` | Tauri auto-update: signed updater artifacts, `latest.json`, GitHub Releases pipeline, and in-app update flow |
+| `llm-agent-integration` | LLM chat or coding agents: OpenRouter, streaming, tool calling, agent loops, prompt injection, safe file access, and cost limits |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |
 
 ## Web defaults
