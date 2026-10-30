@@ -1,0 +1,33 @@
+{
+  "skill": "i18n-localization",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "add uzbek and english to my react app, all the text is hardcoded right now",
+      "should_trigger": true,
+      "assertions": [
+        "Extracts strings into keyed message files with a stated fallback locale",
+        "Uses ICU plurals and Intl formatting instead of manual string building",
+        "Sets html lang and persists the user's language choice"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "the file count says 1 files and our russian users see wrong endings, dates show as US format everywhere",
+      "should_trigger": true,
+      "assertions": [
+        "Uses Intl.PluralRules or ICU plural categories, noting Russian has one, few, many, and other",
+        "Formats dates with Intl.DateTimeFormat using the active locale and an explicit time zone",
+        "Avoids concatenating fragments"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "write a rust function that parses a csv line",
+      "should_trigger": false,
+      "assertions": [
+        "The i18n-localization skill is not loaded"
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 ### Added
 
 - Skill: `llm-agent-integration` for LLM chat and coding-agent features: key handling, streaming, tool schemas, agent loop limits, prompt injection defense, and confirmation for risky actions.
+- Skill: `i18n-localization` for translation keys, ICU plurals, `Intl` formatting, locale detection, hreflang, and Uzbek Latin and Cyrillic support.
 - Skill: `numerical-methods` for numerical algorithms: method selection, tolerances and stopping rules, floating-point pitfalls, and convergence-order tests.
 - Skill: `rust-best-practices` for ownership, typed errors, async safety, `unsafe` discipline, clippy, dependency audits, and release profiles.
 

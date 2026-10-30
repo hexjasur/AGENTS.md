@@ -68,6 +68,7 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `tauri-best-practices` | Tauri v2 apps: capabilities, CSP, Rust commands and IPC, testing, size, CI, and signing |
 | `tauri-auto-update` | Tauri auto-update: signed updater artifacts, `latest.json`, GitHub Releases pipeline, and in-app update flow |
 | `llm-agent-integration` | LLM chat or coding agents: OpenRouter, streaming, tool calling, agent loops, prompt injection, safe file access, and cost limits |
+| `i18n-localization` | Multiple languages: translation keys, ICU plurals, Intl dates and numbers, locale detection, hreflang, and Uzbek Latin and Cyrillic |
 | `numerical-methods` | Numerical algorithms: root finding, integration, linear systems, ODEs, floating-point error, tolerances, and convergence tests |
 | `rust-best-practices` | Rust code: ownership and borrowing, errors, async with Tokio, unsafe, clippy, cargo audit and deny, and release builds |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |
