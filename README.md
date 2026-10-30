@@ -68,6 +68,7 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 | Engineering | `github-actions` | Least-privilege workflows, pinned actions, caching, releases, hardening |
 | Engineering | `skill-authoring` | Writing, evaluating, and splitting Agent Skills and `AGENTS.md` |
 | Engineering | `llm-agent-integration` | OpenRouter and LLM chat, streaming, tool calling, agent loops, prompt injection, safe file access, cost limits |
+| Tauri | `local-data-sqlite` | Local SQLite storage, schema, migrations, WAL, backups, export, chat history |
 | Frontend | `i18n-localization` | Translation keys, ICU plurals, Intl formatting, locale detection, Uzbek Latin and Cyrillic |
 | Engineering | `numerical-methods` | Root finding, integration, linear systems, ODEs, tolerances, convergence tests |
 | Engineering | `rust-best-practices` | Ownership, error handling, async, unsafe, clippy, audits, and release builds |
