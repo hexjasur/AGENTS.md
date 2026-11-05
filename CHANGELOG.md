@@ -6,6 +6,8 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ### Added
 
+- `tauri-auto-update` 1.1.0: `references/update-resilience.md` covering reload, window close, double click, unknown download size, scrolling update dialog, and a manual test matrix; new eval case.
+- `ROADMAP.md` with the docs-site idea.
 - Skill: `llm-agent-integration` for LLM chat and coding-agent features: key handling, streaming, tool schemas, agent loop limits, prompt injection defense, and confirmation for risky actions.
 - Skill: `local-data-sqlite` for local SQLite storage: schemas, forward-only migrations, WAL and locking, parameterized queries, backups, and data export.
 - Skill: `i18n-localization` for translation keys, ICU plurals, `Intl` formatting, locale detection, hreflang, and Uzbek Latin and Cyrillic support.

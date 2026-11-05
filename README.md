@@ -119,6 +119,7 @@ From a source checkout: `./install-agents.sh init ../my-project`.
 2. A version-sync check across `package.json`, `tauri.conf.json`, `Cargo.toml`, and the changelog.
 3. A draft-first release pipeline that builds every platform, **verifies `latest.json`**, and only then publishes.
 4. A user-confirmed in-app update flow with progress and relaunch.
+5. Update-screen resilience: reload or close mid-download, stuck progress, and a correctly scrolling dialog.
 
 It also records the traps that bite in production: a manifest missing a platform, Linux updates needing AppImage, drafts never being served as `latest`, and losing the signing key. Pair it with `tauri-best-practices` for capabilities, CSP, commands, testing, and size.
 
