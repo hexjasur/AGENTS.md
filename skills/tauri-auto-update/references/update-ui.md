@@ -127,6 +127,7 @@ export function UpdateGate() {
   const [update, setUpdate] = useState<Update | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [installing, setInstalling] = useState(false);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -139,9 +140,11 @@ export function UpdateGate() {
 
   const onUpdate = async () => {
     setError(null);
+    setInstalling(true);
     try {
-      await installUpdate(update, (done, total) => setProgress(total ? Math.round((done / total) * 100) : 0));
+      await installUpdate(update, (done, total) => setProgress(total ? Math.round((done / total) * 100) : null));
     } catch (e) {
+      setInstalling(false);
       setProgress(null);
       setError(e instanceof Error ? e.message : String(e));
     }
@@ -151,10 +154,10 @@ export function UpdateGate() {
     <div role="dialog" aria-labelledby="update-title">
       <h2 id="update-title">Version {update.version} is available</h2>
       {update.body && <p>{update.body}</p>}
-      {progress !== null && <progress value={progress} max={100} />}
+      {installing && <progress value={progress ?? undefined} max={100} />}
       {error && <p role="alert">{error}</p>}
-      <button onClick={onUpdate} disabled={progress !== null}>Update and restart</button>
-      <button onClick={() => setUpdate(null)} disabled={progress !== null}>Later</button>
+      <button onClick={onUpdate} disabled={installing}>Update and restart</button>
+      <button onClick={() => setUpdate(null)} disabled={installing}>Later</button>
     </div>
   );
 }
@@ -162,6 +165,7 @@ export function UpdateGate() {
 
 Notes:
 
+- This minimal flow does not survive a reload, a window close, or a double click. Add the guards from `update-resilience.md` before shipping.
 - Use a native `<dialog>` or your design system's modal in a real app; keep focus handling and Escape support.
 - A failed check must never block the app. Log it and move on.
 - If the app also runs on the web or Android, keep the GitHub Releases API path in a separate function and select it by platform. The updater plugin only covers desktop.

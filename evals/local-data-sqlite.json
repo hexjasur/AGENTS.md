@@ -1,0 +1,33 @@
+{
+  "skill": "local-data-sqlite",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "i want to save chat history in my tauri app so it stays after restart",
+      "should_trigger": true,
+      "assertions": [
+        "Stores the database in the app data directory, not the project or install folder",
+        "Proposes conversations and messages tables with foreign keys and indexes",
+        "Uses parameterized queries and versioned migrations"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "users get database is locked errors and after an update some lost their old conversations",
+      "should_trigger": true,
+      "assertions": [
+        "Recommends WAL, busy_timeout, short transactions, and a single writer",
+        "Requires a pre-migration backup and migrations run in a transaction",
+        "Tests migrations against fixture databases from released versions"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "explain how css grid differs from flexbox",
+      "should_trigger": false,
+      "assertions": [
+        "The local-data-sqlite skill is not loaded"
+      ]
+    }
+  ]
+}

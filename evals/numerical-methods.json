@@ -1,0 +1,33 @@
+{
+  "skill": "numerical-methods",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "write newton's method in python for my numerical methods repo",
+      "should_trigger": true,
+      "assertions": [
+        "Takes tolerance and max iterations as parameters and returns a convergence status",
+        "Handles zero derivative and non-convergence explicitly",
+        "Adds tests against a known root such as sqrt(2) and measures convergence order"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my finite difference derivative gets worse when i make h smaller than 1e-10",
+      "should_trigger": true,
+      "assertions": [
+        "Explains the tradeoff between truncation and roundoff error",
+        "Recommends a step near sqrt(eps) for forward or eps^(1/3) for central difference",
+        "Does not recommend making h as small as possible"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "make my landing page hero section responsive",
+      "should_trigger": false,
+      "assertions": [
+        "The numerical-methods skill is not loaded"
+      ]
+    }
+  ]
+}

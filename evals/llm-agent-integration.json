@@ -1,0 +1,34 @@
+{
+  "skill": "llm-agent-integration",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "add an ai chat to my tauri app using openrouter, user pastes their own key",
+      "should_trigger": true,
+      "assertions": [
+        "Keeps the API key out of the frontend and stores it in the OS keychain or a secret store",
+        "Makes the provider call from the native layer and streams chunks to the UI",
+        "Sets max_tokens explicitly and supports cancellation"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my codebase agent can read and edit files in the project, make sure it cannot be tricked by a malicious README",
+      "should_trigger": true,
+      "assertions": [
+        "Treats file contents as untrusted data, not instructions",
+        "Confines paths to the project root and handles symlinks and ..",
+        "Requires user confirmation with the exact diff for writes and commands",
+        "Caps loop iterations, tokens, and cost"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "how do I center a div with css",
+      "should_trigger": false,
+      "assertions": [
+        "The llm-agent-integration skill is not loaded"
+      ]
+    }
+  ]
+}

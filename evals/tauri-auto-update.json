@@ -22,6 +22,17 @@
       ]
     },
     {
+      "id": "refresh-during-update",
+      "prompt": "in my tauri app if the user hits refresh while the update is downloading the ui breaks and the update dialog scrolls weirdly",
+      "should_trigger": true,
+      "assertions": [
+        "Persists an installing flag and does not re-prompt or start a second download after reload",
+        "Blocks window close and reload only while installing and clears the block on failure",
+        "Uses an indeterminate progress bar when contentLength is unknown",
+        "Makes only the release notes area scroll with min-height 0 and overscroll-behavior contain"
+      ]
+    },
+    {
       "id": "negative",
       "prompt": "how do I add a tray icon to my tauri app",
       "should_trigger": false,

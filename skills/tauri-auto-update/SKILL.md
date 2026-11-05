@@ -1,11 +1,11 @@
 ---
 name: tauri-auto-update
-description: Implement, review, and debug the hexjasur Tauri v2 auto-update workflow, which uses signed updater artifacts, a GitHub Release latest.json manifest, a tauri-action release pipeline, synchronized versions, and a user-confirmed in-app update flow. Use when adding auto-update to a Tauri app, changing the release workflow, fixing "no update found", signature, or missing-platform errors, or shipping a new version.
+description: Implement, review, and debug the hexjasur Tauri v2 auto-update workflow, which uses signed updater artifacts, a GitHub Release latest.json manifest, a tauri-action release pipeline, synchronized versions, and a user-confirmed in-app update flow. Use when adding auto-update to a Tauri app, changing the release workflow, fixing "no update found", signature, or missing-platform errors, fixing update-screen bugs (refresh or close mid-update, stuck progress, scrolling dialog), or shipping a new version.
 license: MIT
 metadata:
   author: hexjasur
-  version: "1.0.0"
-  last_reviewed: "2026-10-25"
+  version: "1.1.0"
+  last_reviewed: "2026-11-05"
 ---
 
 # Tauri Auto-Update (hexjasur practice)
@@ -27,7 +27,8 @@ The thing that tells an installed desktop app a new version exists is **not the 
 - [ ] 3. Add the version-sync check (package.json, tauri.conf.json, Cargo.toml, CHANGELOG)
 - [ ] 4. Build the release pipeline: check, draft release, build matrix, verify, publish
 - [ ] 5. Add the in-app update flow with user confirmation
-- [ ] 6. Test an old build updating to a new release before announcing it
+- [ ] 6. Make the flow survive reload, window close, and small windows
+- [ ] 7. Test an old build updating to a new release before announcing it
 ```
 
 1. Run `tauri signer generate` and keep the private key and its password in repository secrets **and** in a password manager. Put the **public key content** (not a path) in config. Losing the private key means existing installs can never be updated.
@@ -35,7 +36,8 @@ The thing that tells an installed desktop app a new version exists is **not the 
 3. Keep one version in `package.json`, `src-tauri/tauri.conf.json`, and `src-tauri/Cargo.toml`, add a matching `CHANGELOG.md` entry, and fail CI if they disagree or the `vX.Y.Z` tag already exists. Script and workflow are in `references/release-workflow.md`.
 4. Pipeline order: **check-version → create draft release → build matrix (upload to the draft) → verify `latest.json` → publish the draft.** Users must never see a half-built release as "latest".
 5. Check after a short delay (about 2.5 s), at most once per hour automatically, show version and notes, install only on user click, show progress, then relaunch. See `references/update-ui.md`.
-6. Install the previous version, publish the new release, confirm the prompt, update, and confirm the new version runs. Also test an offline start and a corrupted download.
+6. Treat reload, window close, double clicks, and unknown download size as normal events: persist an `installing` flag, block reload and close while installing, allow only one install at a time, use an indeterminate bar when the size is unknown, and scroll only the release notes inside a native `<dialog>`. See `references/update-resilience.md`.
+7. Install the previous version, publish the new release, confirm the prompt, update, and confirm the new version runs. Also test an offline start, a corrupted download, F5 mid-download, and closing the window mid-install.
 
 ## Guardrails
 
@@ -43,6 +45,8 @@ The thing that tells an installed desktop app a new version exists is **not the 
 - Never disable signature verification, and never use `dangerousInsecureTransportProtocol` in production. Endpoints must be HTTPS.
 - Never install an update silently without user consent.
 - Never reuse or overwrite a published version. If a release is bad, publish a **higher** patch version with the fix.
+- Never leave the user trapped: block close and reload only while an install runs, and clear the block on every failure path.
+- Never render `update.body` as HTML; release notes come from the manifest and are untrusted.
 - Never put a different endpoint per release; keep the `latest/download/latest.json` URL stable.
 - Never rotate the updater key without a migration plan, because old installs only trust the old public key.
 - Do not ship an app whose `latest.json` was not inspected after CI produced it.
@@ -58,6 +62,9 @@ The thing that tells an installed desktop app a new version exists is **not the 
 - On Windows the app exits while the installer runs. `installMode: "passive"` (default) shows progress without prompts.
 - The updater plugin is desktop-only. Handle Android, iOS, and web with a separate path (store, APK link, or nothing) behind one `updater` abstraction chosen by platform.
 - Pin every GitHub Action to a full commit SHA. Check the current `tauri-action` major version; the official docs currently use `@v1`.
+- A reload wipes JS state, not the download. After a reload treat install progress as unknown, do not re-prompt, and never start a second download.
+- `contentLength` can be `undefined`; dividing by it gives a bar stuck at 0%. Render an indeterminate `<progress>`.
+- A `flex` child with a scrolling area needs `min-height: 0`, and the background needs `overscroll-behavior: contain` or a scroll lock, otherwise the update dialog scrolls the page behind it.
 - `pub_date` must be RFC 3339 and `version` valid SemVer.
 - A tag that already exists stops the release by default. Offer a `force` input only for deliberate rebuilds.
 
@@ -65,4 +72,4 @@ The thing that tells an installed desktop app a new version exists is **not the 
 
 For a review: list what is correct, then issues ordered by risk (users cannot update, security, release safety, UX), each with the file, the problem, and the fix. State what was tested end to end and what was not.
 
-Read `references/release-workflow.md` for the version check script, the release workflow template, the manifest verification step, and an optional custom manifest generator. Read `references/update-ui.md` for configuration snippets and the React update flow.
+Read `references/release-workflow.md` for the version check script, the release workflow template, the manifest verification step, and an optional custom manifest generator. Read `references/update-ui.md` for configuration snippets and the React update flow. Read `references/update-resilience.md` for refresh, close, scroll, and progress bugs, with code and a manual test matrix.

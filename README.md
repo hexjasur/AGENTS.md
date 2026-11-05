@@ -67,6 +67,11 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 | Engineering | `repo-quality` | Minimal diffs, tests, builds, releases, code review |
 | Engineering | `github-actions` | Least-privilege workflows, pinned actions, caching, releases, hardening |
 | Engineering | `skill-authoring` | Writing, evaluating, and splitting Agent Skills and `AGENTS.md` |
+| Engineering | `llm-agent-integration` | OpenRouter and LLM chat, streaming, tool calling, agent loops, prompt injection, safe file access, cost limits |
+| Tauri | `local-data-sqlite` | Local SQLite storage, schema, migrations, WAL, backups, export, chat history |
+| Frontend | `i18n-localization` | Translation keys, ICU plurals, Intl formatting, locale detection, Uzbek Latin and Cyrillic |
+| Engineering | `numerical-methods` | Root finding, integration, linear systems, ODEs, tolerances, convergence tests |
+| Engineering | `rust-best-practices` | Ownership, error handling, async, unsafe, clippy, audits, and release builds |
 | Ren'Py | `renpy-visual-novel` | Script structure, state, saves and updates, translation, builds, itch.io |
 | Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
 | Ren'Py | `renpy-main-menu-design` | Modern card-grid main menus: hero art, art tiles, Continue-from-save card |
@@ -114,6 +119,7 @@ From a source checkout: `./install-agents.sh init ../my-project`.
 2. A version-sync check across `package.json`, `tauri.conf.json`, `Cargo.toml`, and the changelog.
 3. A draft-first release pipeline that builds every platform, **verifies `latest.json`**, and only then publishes.
 4. A user-confirmed in-app update flow with progress and relaunch.
+5. Update-screen resilience: reload or close mid-download, stuck progress, and a correctly scrolling dialog.
 
 It also records the traps that bite in production: a manifest missing a platform, Linux updates needing AppImage, drafts never being served as `latest`, and losing the signing key. Pair it with `tauri-best-practices` for capabilities, CSP, commands, testing, and size.
 
