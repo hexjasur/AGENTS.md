@@ -4,6 +4,8 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-05
+
 ### Added
 
 - `tauri-auto-update` 1.1.0: `references/update-resilience.md` covering reload, window close, double click, unknown download size, scrolling update dialog, and a manual test matrix; new eval case.
