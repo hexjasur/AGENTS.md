@@ -128,7 +128,7 @@ stop with a clear "step limit reached" message
 ## Sources
 
 - OpenRouter API reference and streaming: https://openrouter.ai/docs
-- OpenRouter tool calling: https://openrouter.ai/docs/features/tool-calling
+- OpenRouter tool calling: https://openrouter.ai/docs/guides/features/tool-calling
 - OWASP Top 10 for LLM Applications: https://genai.owasp.org/llm-top-10/
 - Model Context Protocol security best practices: https://modelcontextprotocol.io/docs/tutorials/security/security_best_practices
 - Tauri security and capabilities: https://v2.tauri.app/security/
