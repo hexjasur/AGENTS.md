@@ -4,6 +4,13 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-11-18
+
+### Fixed
+
+- README images and file links use absolute URLs so the logo and banner render on GitHub Packages and npm.
+- Skill tests escape every regex character in the package version, not only dots.
+
 ## [1.7.0] - 2026-11-18
 
 ### Added
