@@ -4,6 +4,12 @@ All notable changes are documented here. The format follows [Keep a Changelog](h
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-18
+
+### Added
+
+- Skill: `figma-to-code` for implementing Figma designs with the Figma MCP server: component mapping through Code Connect, variables to tokens (light and dark modes), auto layout to flex and grid, and design-vs-build checks. Includes an MCP tool reference and a Variables REST API reference.
+
 ## [1.6.0] - 2026-11-05
 
 ### Added
