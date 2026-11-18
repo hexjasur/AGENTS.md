@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/agents-skills-mark.png" alt="Agent Skills modular mark" width="112" />
+  <img src="https://raw.githubusercontent.com/hexjasur/AGENTS.md/main/assets/agents-skills-mark.png" alt="Agent Skills modular mark" width="112" />
   <h1>@hexjasur/agents-md</h1>
   <p><strong>Stop re-explaining your stack to your AI. Install it once.</strong></p>
   <p>
@@ -18,7 +18,7 @@
 </div>
 
 <p align="center">
-  <img src="./assets/agents-skills-banner.png" alt="Abstract modular network representing reusable Agent Skills" width="100%" />
+  <img src="https://raw.githubusercontent.com/hexjasur/AGENTS.md/main/assets/agents-skills-banner.png" alt="Abstract modular network representing reusable Agent Skills" width="100%" />
 </p>
 
 ```sh
@@ -77,7 +77,7 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 | Ren'Py | `renpy-ui-screens` | GUI, screens, styles, ATL, PNG-free UI, accessibility, touch |
 | Ren'Py | `renpy-main-menu-design` | Modern card-grid main menus: hero art, art tiles, Continue-from-save card |
 
-Every skill has a precise trigger description, a procedure, hard guardrails, real-world gotchas, a report format, and links to official sources. Each one is covered by eval prompts in [`evals/`](./evals).
+Every skill has a precise trigger description, a procedure, hard guardrails, real-world gotchas, a report format, and links to official sources. Each one is covered by eval prompts in [`evals/`](https://github.com/hexjasur/AGENTS.md/blob/main/evals).
 
 ## Quick start
 
@@ -184,11 +184,11 @@ If `AGENTS.md` already exists, the default is to keep it and install missing ski
 - `update` compares the installed file's SHA-256 hash with the manifest and stops on local edits unless `--force` is supplied.
 - Skill names are validated against the bundled list, and symlinked managed files and manifest paths are rejected.
 
-The hash detects accidental or local edits; it is not a digital signature. Run the CLI from a trusted source and review the package before using it in sensitive repositories. To report a vulnerability, see [SECURITY.md](./SECURITY.md).
+The hash detects accidental or local edits; it is not a digital signature. Run the CLI from a trusted source and review the package before using it in sensitive repositories. To report a vulnerability, see [SECURITY.md](https://github.com/hexjasur/AGENTS.md/blob/main/SECURITY.md).
 
 ## Contributing
 
-Contributions are welcome: sharper skills, new skills for stacks you know well, fixes, and docs. Start with [CONTRIBUTING.md](./CONTRIBUTING.md), or open a [skill request](https://github.com/hexjasur/AGENTS.md/issues/new?template=skill_request.yml). Please follow the [Code of Conduct](./CODE_OF_CONDUCT.md). Release history is in [CHANGELOG.md](./CHANGELOG.md).
+Contributions are welcome: sharper skills, new skills for stacks you know well, fixes, and docs. Start with [CONTRIBUTING.md](https://github.com/hexjasur/AGENTS.md/blob/main/CONTRIBUTING.md), or open a [skill request](https://github.com/hexjasur/AGENTS.md/issues/new?template=skill_request.yml). Please follow the [Code of Conduct](https://github.com/hexjasur/AGENTS.md/blob/main/CODE_OF_CONDUCT.md). Release history is in [CHANGELOG.md](https://github.com/hexjasur/AGENTS.md/blob/main/CHANGELOG.md).
 
 ```sh
 npm run verify    # tests, skill and eval validation, and a dry-run package listing
@@ -267,4 +267,4 @@ Repository administrators must separately enable branch protection or a ruleset 
 ## Links
 
 - Repository and issues: [hexjasur/AGENTS.md](https://github.com/hexjasur/AGENTS.md)
-- License: [MIT](./LICENSE)
+- License: [MIT](https://github.com/hexjasur/AGENTS.md/blob/main/LICENSE)
