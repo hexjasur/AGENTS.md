@@ -72,6 +72,7 @@ Skills are progressive-disclosure modules: metadata first, `SKILL.md` on activat
 | `i18n-localization` | Multiple languages: translation keys, ICU plurals, Intl dates and numbers, locale detection, hreflang, and Uzbek Latin and Cyrillic |
 | `numerical-methods` | Numerical algorithms: root finding, integration, linear systems, ODEs, floating-point error, tolerances, and convergence tests |
 | `rust-best-practices` | Rust code: ownership and borrowing, errors, async with Tokio, unsafe, clippy, cargo audit and deny, and release builds |
+| `figma-to-code` | Figma designs to code: MCP tools, Code Connect mapping, variables to tokens, auto layout, and design-vs-build checks |
 | `skill-authoring` | Writing, reviewing, evaluating, or splitting Agent Skills and `AGENTS.md` files |
 
 ## Web defaults

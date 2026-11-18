@@ -29,7 +29,7 @@ It shows what it will install, asks `Continue with installation? [y/N]`, and on 
 
 ```text
 AGENTS.md                              the project-wide contract for your agent
-.agent/skills/                         the skills you chose (default: all 16)
+.agent/skills/                         the skills you chose (default: all 17)
 .agent/hexjasurs.agent.scheme.json     version and SHA-256 manifest for safe updates
 ```
 
@@ -55,6 +55,7 @@ npx -y @hexjasur/agents-md --skills react-typescript,ui-ux-design           # in
 | Area | Skill | Best for |
 | --- | --- | --- |
 | Frontend | `react-typescript` | React 19+ components, hooks, state and effects, strict TypeScript, forms, Tailwind |
+| Frontend | `figma-to-code` | Figma to code with MCP, Code Connect, design variables, and auto layout mapping |
 | Frontend | `ui-ux-design` | Design tokens, hierarchy, dark and glass UI, motion, states, UI review |
 | Frontend | `testing-web` | Vitest, Testing Library, Playwright, MSW, flaky tests, CI |
 | Web platform | `modern-web-guidance` | Baseline-aware architecture, native APIs, progressive enhancement |

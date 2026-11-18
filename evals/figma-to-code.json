@@ -1,0 +1,33 @@
+{
+  "skill": "figma-to-code",
+  "evals": [
+    {
+      "id": "casual",
+      "prompt": "implement this figma frame in our react app, use the existing buttons and cards",
+      "should_trigger": true,
+      "assertions": [
+        "Searches for existing components before writing markup",
+        "Maps Figma variables to existing tokens instead of hard-coded values",
+        "Compares the result against the design at each breakpoint"
+      ]
+    },
+    {
+      "id": "edge",
+      "prompt": "my figma colors in dark mode don't match the code, the variables look right in figma",
+      "should_trigger": true,
+      "assertions": [
+        "Reads local variables with modes rather than published variables",
+        "Maps the dark mode values to a data-theme or prefers-color-scheme switch",
+        "Does not duplicate components per theme"
+      ]
+    },
+    {
+      "id": "negative",
+      "prompt": "fix a null pointer exception in my java service",
+      "should_trigger": false,
+      "assertions": [
+        "The figma-to-code skill is not loaded"
+      ]
+    }
+  ]
+}
