@@ -112,7 +112,8 @@ test('skills and AGENTS.md carry no secrets or machine-specific paths', async ()
 test('AGENTS.md version matches package.json', async () => {
   const pkg = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
   const agents = await readFile(path.join(root, 'AGENTS.md'), 'utf8');
-  assert.match(agents, new RegExp(`^Version: ${pkg.version.replace(/\./g, '\\.')}$`, 'm'));
+  const escapedVersion = pkg.version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  assert.match(agents, new RegExp(`^Version: ${escapedVersion}$`, 'm'));
 });
 
 test('every skill has an eval file with positive, edge, and negative prompts', async () => {
